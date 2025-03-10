@@ -1,0 +1,38 @@
+[
+  {
+    "username": "psy_john",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "john.doe@psy.com",
+    "password": "securepassword123",
+    "role": "psychologue",
+    "age": 40
+  },
+  {
+    "username": "med_lisa",
+    "firstname": "Lisa",
+    "lastname": "Smith",
+    "email": "lisa.smith@med.com",
+    "password": "strongpassword456",
+    "role": "médecin",
+    "age": 35
+  },
+  {
+    "username": "coach_mike",
+    "firstname": "Mike",
+    "lastname": "Johnson",
+    "email": "mike.johnson@coach.com",
+    "password": "coachingpass789",
+    "role": "coach en gestion du stress",
+    "age": 45
+  },
+  {
+    "username": "thera_anna",
+    "firstname": "Anna",
+    "lastname": "Brown",
+    "email": "anna.brown@thera.com",
+    "password": "therapystrong321",
+    "role": "thérapeute",
+    "age": 38
+  }
+]
