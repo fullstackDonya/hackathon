@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
+const http = require("http"); // Importer le module http
 // Import des routes
 const routes = require("./routes/routes");
 
@@ -26,11 +27,10 @@ mongoose
 
 app.use("/", routes);
 
-// Créer un serveur HTTP
-const server = http.createServer(app);
-
-
 app.use('/Models/uploads', express.static('models/uploads'));  // Pour servir les fichiers statiques
+
+// Créer le serveur HTTP
+const server = http.createServer(app);
 
 // Démarrer le serveur HTTP
 server.listen(PORT, () => {
