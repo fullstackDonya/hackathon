@@ -3,8 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
-const { setupWebSocket } = require("./websocket");
-const http = require("http");
 // Import des routes
 const routes = require("./routes/routes");
 
@@ -31,8 +29,6 @@ app.use("/", routes);
 // Créer un serveur HTTP
 const server = http.createServer(app);
 
-// Configurer le WebSocket avec le serveur HTTP
-setupWebSocket(server);
 
 app.use('/Models/uploads', express.static('models/uploads'));  // Pour servir les fichiers statiques
 
