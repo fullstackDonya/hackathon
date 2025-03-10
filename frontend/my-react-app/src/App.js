@@ -2,19 +2,19 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store"; 
-import Register from "./Components/Register/Register";
-import Login from "./Components/Login/Login";
+import Register from "./components/Register/Register";
+import Login from "./components/Login/Login";
 
-import Users from "./Components/Users/Users";
-import AddUser from "./Components/Users/AddUser";
-import UpdateUser from "./Components/Users/UpdateUser";
-import Navbar from "./Components/Navbar/Navbar"; 
-import Logout from "./Components/Logout/Logout";
+import Users from "./components/Users/Users";
+import AddUser from "./components/Users/AddUser";
+import UpdateUser from "./components/Users/UpdateUser";
+import Navbar from "./components/Navbar/Navbar"; 
+import Logout from "./components/Logout/Logout";
 
-import Footer from "./Components/Footer/Footer";
+import Footer from "./components/Footer/Footer";
 
-import Posts from "./Components/Posts/Posts";
-import PostDetails from "./Components/Posts/PostDetails";
+import Posts from "./components/Posts/Posts";
+import PostDetails from "./components/Posts/PostDetails";
 
 function App() {
   

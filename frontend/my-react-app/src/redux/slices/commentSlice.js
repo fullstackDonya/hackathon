@@ -25,19 +25,19 @@ export const fetchComments = createAsyncThunk(
   }
 );
 
-export const sendMessage = createAsyncThunk(
-  "messages/sendMessage",
-  async ({ sender, conversationId, content }, { rejectWithValue, getState }) => {
+export const sendComment = createAsyncThunk(
+  "comments/sendComment",
+  async ({ sender, postId, content }, { rejectWithValue, getState }) => {
     try {
       const { auth } = getState();
-      const response = await axios.post(`/send`, { sender, conversation : conversationId, content }, {
+      const response = await axios.post(`/send`, { sender, post: postId, content }, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
           'Content-Type': 'application/json'
         }
       });
       if (response.status !== 201) {
-        throw new Error("Erreur lors de l'envoi du message");
+        throw new Error("Erreur lors de l'envoi du commentaire");
       }
 
       return response.data;
@@ -47,56 +47,50 @@ export const sendMessage = createAsyncThunk(
   }
 );
 
-const messageSlice = createSlice({
-  name: 'messages',
+const commentSlice = createSlice({
+  name: 'comments',
   initialState: {
-    messages: {},
+    comments: {},
     loading: false,
     error: null,
   },
   reducers: {
-    addMessageToConversation: (state, action) => {
-      const { conversation, ...message } = action.payload;
-      const conversationId = conversation; 
+    addCommentToPost: (state, action) => {
+      const { post, ...comment } = action.payload;
+      const postId = post; 
       
-      if (state.messages[conversationId]) {
-          state.messages[conversationId].push(message);
+      if (state.comments[postId]) {
+          state.comments[postId].push(comment);
       } else {
-          state.messages[conversationId] = [message];
+          state.comments[postId] = [comment];
       }
-      
-        if (state.messages[conversationId]) {
-            state.messages[conversationId].push(message);
-        } else {
-            state.messages[conversationId] = [message];
-        }
     }
   },
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchMessages.pending, (state) => {
+      .addCase(fetchComments.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchMessages.fulfilled, (state, action) => {
-        console.log("📩 Messages reçus de l'API :", action.payload);
+      .addCase(fetchComments.fulfilled, (state, action) => {
+        console.log("📩 Commentaires reçus de l'API :", action.payload);
         state.loading = false;
-        state.messages[action.meta.arg] = action.payload;
+        state.comments[action.meta.arg] = action.payload;
       })
-      .addCase(fetchMessages.rejected, (state, action) => {
+      .addCase(fetchComments.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(sendMessage.fulfilled, (state, action) => {
-        const { conversationId, message } = action.payload;
-        if (state.messages[conversationId]) {
-          state.messages[conversationId].push(message);
+      .addCase(sendComment.fulfilled, (state, action) => {
+        const { postId, comment } = action.payload;
+        if (state.comments[postId]) {
+          state.comments[postId].push(comment);
         } else {
-          state.messages[conversationId] = [message];
+          state.comments[postId] = [comment];
         }
       });
   },
 });
 
-export const { addMessageToConversation } = messageSlice.actions;
-export default messageSlice.reducer;
+export const { addCommentToPost } = commentSlice.actions;
+export default commentSlice.reducer;
