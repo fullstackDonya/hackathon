@@ -7,6 +7,8 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = () => {
@@ -15,6 +17,8 @@ const Register = () => {
         email: email,
         password: password,
         username: username,
+        firstname: firstname,
+        lastname: lastname,
       })
       .then((response) => {
         alert("Compte crée avec succès");
@@ -44,6 +48,19 @@ const Register = () => {
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
+      <input
+        type="text"
+        placeholder="Lastname"
+        value={lastname}
+        onChange={(e) => setLastname(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="FirstName"
+        value={firstname}
+        onChange={(e) => setFirstname(e.target.value)}
+      />
+      
       <input
         type="password"
         placeholder="Password"
