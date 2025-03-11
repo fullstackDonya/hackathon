@@ -1,103 +1,68 @@
 .container-posts {
-  max-width: 1200px;
-margin-top: 100px;
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
   padding: 20px;
-  display: flex;
-  gap: 20px;
 }
 
-/* Section des posts (gauche) */
+.main-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+}
+
 .posts-section {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
+  width: 70%;
+  margin-right: 20px;
 }
 
-.create-post {
-  display: flex;
-  gap: 10px;
+.new-post-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.post-button {
+  padding: 10px 20px;
   margin-bottom: 20px;
 }
 
-.create-post input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.create-post button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.create-post button:hover {
-  background-color: #0056b3;
-}
-
-/* Liste des posts */
-.posts-container {
-  margin-top: 10px;
-}
-
-
-/* Images des posts */
-.post-images {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.post-image {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 5px;
-  margin: 5px;
-}
-
-/* Section des utilisateurs (droite) */
-.users-section {
-  flex: 1;
+.post-item {
   background: #f9f9f9;
   padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  border-radius: 5px;
 }
 
-.user-card {
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.users-section {
+  width: 30%;
+}
+
+.user-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: #f9f9f9;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+  border-radius: 5px;
 }
 
-.user-card button {
-  background-color: #28a745;
+.follow-button {
+  padding: 5px 10px;
+  background-color: #1da1f2;
   color: white;
   border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 3px;
   cursor: pointer;
 }
 
-.user-card button:hover {
-  background-color: #218838;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
-
-  .posts-section, .users-section {
-    width: 100%;
-  }
+.follow-button:hover {
+  background-color: #0d8ddb;
 }

@@ -21,6 +21,16 @@ const getPostById = async (req, res) => {
     }
 };
 
+// Get posts by user ID
+const getPostsByUserId = async (req, res) => {
+    try {
+        const posts = await Post.find({ author: req.params.userId });
+        res.status(200).json(posts);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // Create a new post
 const createPost = async (req, res) => {
     try {
@@ -74,5 +84,6 @@ module.exports = {
     getPostById,
     createPost,
     updatePost,
-    deletePost
- }
+    deletePost,
+    getPostsByUserId // Ajoutez cette ligne
+}

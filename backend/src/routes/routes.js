@@ -28,7 +28,9 @@ const {
   getPostById,
   createPost,
   updatePost,
-  deletePost
+  deletePost,
+  getPostsByUserId
+
 } = require("../Controllers/postController");
 
 const { like, unlike } = require('../controllers/likeController');
@@ -75,6 +77,7 @@ router.get("/post/:id", getPostById);
 router.post("/post", upload.single("image"), authMiddleware, createPost);
 router.put("/post/:id", authMiddleware, updatePost);
 router.delete("/post/:id", authMiddleware, deletePost);
+router.get("/posts/user/:userId", getPostsByUserId);
 
 // Routes Comments
 router.get("/comment/:id", authMiddleware, getCommentById);
