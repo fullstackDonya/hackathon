@@ -30,8 +30,7 @@ const {
   updatePost,
   deletePost,
   getPostsByUserId
-
-} = require("../Controllers/postController");
+} = require("../controllers/postController");
 
 const { like, unlike } = require('../controllers/likeController');
 const { addSignet, removeSignet ,getUserSignets } = require('../controllers/signetController');
@@ -43,6 +42,7 @@ const { getNotifications, markAsRead, markAllAsRead } = require('../controllers/
 const multer = require('multer');
 const fs = require("fs");
 const path = require("path");
+
 const uploadDirectory = path.join(__dirname, "../Models", "uploads");
 
 if (!fs.existsSync(uploadDirectory)) {
@@ -58,6 +58,8 @@ const storage = multer.diskStorage({
   }
 });
 
+
+
 const upload = multer({ storage });
 
 // Routes utilisateur
@@ -72,7 +74,7 @@ router.get("/logout", authMiddleware, Logout);
 router.get("/connected", authMiddleware, getConnectedUsers);
 
 // Routes posts
-router.get("/posts", getAllPosts);
+router.get("/posts", authMiddleware, getAllPosts);
 router.get("/post/:id", getPostById);
 router.post("/post", upload.single("image"), authMiddleware, createPost);
 router.put("/post/:id", authMiddleware, updatePost);

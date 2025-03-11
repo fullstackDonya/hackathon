@@ -24,8 +24,20 @@ export const fetchConnectedUsers = createAsyncThunk(
   }
 );
 
+// Action pour récupérer les informations de l'utilisateur
+export const fetchUserById = createAsyncThunk(
+  'users/fetchUserById',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/user/${userId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'Erreur serveur');
+    }
+  }
+);
 
-// Action pour récupérer la liste es utilisateurs
+// Action pour récupérer la liste des utilisateurs
 export const fetchUsers = createAsyncThunk(
   'users/fetchUsers',
   async (_, { rejectWithValue }) => {
@@ -64,6 +76,7 @@ export const register = createAsyncThunk(
     }
   }
 );
+
 const usersSlice = createSlice({
   name: 'users',
   initialState: {
@@ -81,6 +94,7 @@ const usersSlice = createSlice({
         state.loading = false;
         state.list = action.payload;
       })
+      
       .addCase(fetchConnectedUsers.pending, (state) => {
         state.loading = true;
       })
@@ -92,7 +106,14 @@ const usersSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(fetchUsers.rejected, (state, action) => {
+      .addCase(fetchUserById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchUserById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(fetchUserById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

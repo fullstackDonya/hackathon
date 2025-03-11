@@ -11,7 +11,7 @@ import AddUser from "./components/Users/AddUser";
 import UpdateUser from "./components/Users/UpdateUser";
 import Navbar from "./components/Navbar/Navbar"; 
 import Logout from "./components/Logout/Logout";
-
+import Home from "./pages/Home/Home";
 import Footer from "./components/Footer/Footer";
 
 import Posts from "./components/Posts/Posts";
@@ -23,7 +23,8 @@ function App() {
       <BrowserRouter>
         <Navbar /> 
         <Routes>
-          <Route path="/" element={<Posts />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/post" element={<Posts />} />
           <Route path="/post/:id" element={<PostDetails />} /> 
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />

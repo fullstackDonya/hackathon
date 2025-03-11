@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchPosts, deletePost } from "../../redux/slices/postsSlice";
+import { fetchPosts, deletePost, createPost } from "../../redux/slices/postsSlice";
 import { fetchUsers } from "../../redux/slices/usersSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faRetweet, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -12,23 +12,40 @@ const Posts = () => {
   const navigate = useNavigate();
   const posts = useSelector((state) => state.posts.list);
   const users = useSelector((state) => state.users.list);
-  const authUser = useSelector((state) => state.auth.user); // Utilisateur connecté
+  const authUserId = useSelector((state) => state.auth.userId); // Utilisateur connecté
+  const authToken = useSelector((state) => state.auth.token); // Token d'authentification
   const [newPost, setNewPost] = useState("");
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     dispatch(fetchPosts());
     dispatch(fetchUsers()); // Récupérer les utilisateurs
   }, [dispatch]);
 
-  const handlePostSubmit = () => {
-    console.log("Nouveau post: ", newPost);
+  const handlePostSubmit = (e) => {
+    e.preventDefault();
+    if (!authUserId) {
+      console.error("Utilisateur non authentifié");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("title", newPost);
+    formData.append("author", authUserId);
+    if (image) {
+      formData.append("image", image);
+    }
+    dispatch(createPost({ formData, authToken }));
     setNewPost("");
+    setImage(null);
   };
 
   const handleDelete = (postId) => {
     dispatch(deletePost(postId));
   };
 
+  const handleGet = (id) => {
+    navigate(`/post/${id}`);
+  };
   const handleLike = (postId) => {
     console.log("Like post: ", postId);
   };
@@ -41,25 +58,33 @@ const Posts = () => {
     <div className="container-posts">
       <div className="main-content">
         <div className="posts-section">
-          <input
-            type="text"
-            placeholder="Quoi de neuf ?"
-            value={newPost}
-            onChange={(e) => setNewPost(e.target.value)}
-            className="new-post-input"
-          />
-          <button onClick={handlePostSubmit} className="post-button">
-            Poster
-          </button>
+          <form onSubmit={handlePostSubmit}>
+            <input
+              type="text"
+              placeholder="Quoi de neuf ?"
+              value={newPost}
+              onChange={(e) => setNewPost(e.target.value)}
+              className="new-post-input"
+            />
+            <input
+              type="file"
+              onChange={(e) => setImage(e.target.files[0])}
+              className="new-post-input"
+            />
+            <button type="submit" className="post-button">
+              Poster
+            </button>
+          </form>
 
           <ul>
             {posts.map((post) => (
               <li key={post._id} className="post-item">
-                <p><strong>{post.title}</strong></p>
-                <p>{post.createdAt}</p>
-
+           <  a href="#" onClick={() => handleGet(post._id)} className="post-link">
+                  <p><strong>{post.title}</strong></p>
+                  <p>{post.createdAt}</p>
+                </a>
                 {/* Boutons Modifier/Supprimer si c'est l'auteur */}
-                {authUser && authUser.id === post.userId ? (
+                {authUserId && authUserId === post.userId ? (
                   <div className="post-actions">
                     <button onClick={() => navigate(`/post/edit/${post._id}`)}>
                       <FontAwesomeIcon icon={faEdit} /> Modifier

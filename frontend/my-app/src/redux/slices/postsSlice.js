@@ -74,6 +74,24 @@ export const fetchPostsByUserId = createAsyncThunk(
   }
 );
 
+// Async thunk pour créer un nouveau post
+export const createPost = createAsyncThunk(
+  'posts/createPost',
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/post', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'Erreur serveur');
+    }
+  }
+);
+
 const postsSlice = createSlice({
   name: 'posts',
   initialState: {
@@ -116,6 +134,17 @@ const postsSlice = createSlice({
         state.list = action.payload;
       })
       .addCase(fetchPostsByUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(createPost.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list.push(action.payload);
+      })
+      .addCase(createPost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

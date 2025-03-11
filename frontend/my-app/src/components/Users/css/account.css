@@ -1,92 +1,135 @@
 .account-container {
-  margin-top: 50px;
-  margin-left: 10%;
-  max-width: 950px;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 50px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  background-color: #f5f8fa;
+  font-family: Arial, sans-serif;
 }
 
 .account-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  text-align: center;
   margin-bottom: 20px;
-}
-
-.account-header h2 {
-  font-size: 2rem;
-  font-weight: bold;
-  color: black !important;
+  border-bottom: 1px solid #e1e8ed;
+  padding-bottom: 10px;
 }
 
 .add-post-button {
-  font-size: 1.5rem;
-  color: black;
-  text-decoration: none;
-  background: rgba(255, 255, 255, 0.2);
+  background-color: #1da1f2;
+  color: white;
+  border: none;
   padding: 10px;
   border-radius: 50%;
-  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
-  transition: background 0.3s;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
 }
 
 .add-post-button:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background-color: #0d8ddb;
 }
 
 .account-info {
-  margin-top: 20px;
+  background: #ffffff;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #e1e8ed;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+}
+.account-info p {
+  margin: 6px ;
 }
 
-.account-info p {
-  font-size: 1.2rem;
-  margin: 10px 0;
-  color: black !important;
+.profile-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.followed-users {
+  background: #ffffff;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #e1e8ed;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .account-posts {
-  margin-top: 20px;
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #e1e8ed;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.account-posts h3 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: black !important;
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .post {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 20px;
-  margin: 10px 0;
-  border-radius: 8px;
-  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #e1e8ed;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .post h4 {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: black !important;
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #14171a;
 }
 
 .post p {
-  font-size: 1rem;
-  color: black !important;
+  margin: 0 0 10px;
+  color: #657786;
 }
 
-.loading {
-  text-align: center;
-  font-size: 1.5rem;
+.post-date {
+  font-size: 12px;
+  color: #aab8c2;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.post-actions button {
+  background: none;
+  border: none;
+  color: #1da1f2;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.post-actions button:hover {
+  text-decoration: underline;
+}
+
+.delete-button {
+  background-color: #ff4d4d;
   color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-.error {
-  text-align: center;
-  font-size: 1.5rem;
-  color: red;
+.delete-button:hover {
+  background-color: #ff1a1a;
 }

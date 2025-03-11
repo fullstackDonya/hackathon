@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import Logout from '../Logout/Logout';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { logout } from '../../redux/slices/authSlice';
 import './Navbar.css';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const isAuthenticated = useSelector((state) => state.auth.token !== null);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <nav className="navbar">
-
       <div className="navbar-logo">
-        {/* <img src="/logo.svg" alt="Logo" /> */}
-        <h3><i class="fa-brands fa-twitter"></i></h3>
+        <h3><i className="fa-brands fa-twitter"></i></h3>
       </div>
       <div className="navbar-toggle" onClick={() => setMenuOpen(!menuOpen)}>
         <span></span>
@@ -21,20 +25,17 @@ const Navbar = () => {
         <span></span>
       </div>
 
-      {/* NAVIGATION LINKS */}
       <ul className={`navbar-links ${menuOpen ? "active" : ""}`}>
         <li><Link to="/" onClick={() => setMenuOpen(false)}>Accueil</Link></li>
         {isAuthenticated && (
           <>
-            {/* <li><Link to="/conversations" onClick={() => setMenuOpen(false)}>Conversations</Link></li> */}
+            <li><Link to="/post" onClick={() => setMenuOpen(false)}>Post</Link></li>
             <li><Link to="/account" onClick={() => setMenuOpen(false)}>Mon Compte</Link></li>
           </>
         )}
-  
-        {/* <li><Link to="/users" onClick={() => setMenuOpen(false)}>Gestion des Utilisateurs</Link></li> */}
-
         {isAuthenticated ? (
-          <li><Logout /></li>
+          <li className="logout-button" onClick={handleLogout}>Déconnexion
+          </li>
         ) : (
           <>
             <li><Link to="/register" onClick={() => setMenuOpen(false)}>Inscription</Link></li>
