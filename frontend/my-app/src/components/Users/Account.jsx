@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPostsByUserId } from "../../redux/slices/postsSlice";
-import './css/account.css';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import "./css/account.css";
 
 const Account = () => {
   const dispatch = useDispatch();
@@ -27,25 +29,35 @@ const Account = () => {
       <div className="account-header">
         <h2>Mon Compte</h2>
         <Link to="/add-post" className="add-post-button">
-          <i className="fa-solid fa-plus"></i>
+          <FontAwesomeIcon icon={faPlus} />
         </Link>
       </div>
+
       <div className="account-info">
-        <p>Nom d'utilisateur: {user.username}</p>
-        <p>Email: {user.email}</p>
-        <p>Prénom: {user.firstname}</p>
-        <p>Nom: {user.lastname}</p>
+        <p><strong>Nom d'utilisateur :</strong> {user.username}</p>
+        <p><strong>Email :</strong> {user.email}</p>
+        <p><strong>Prénom :</strong> {user.firstname}</p>
+        <p><strong>Nom :</strong> {user.lastname}</p>
       </div>
+
       <div className="account-posts">
         <h3>Mes Posts</h3>
         {loading && <div className="loading">Chargement des posts...</div>}
         {error && <div className="error">Erreur lors du chargement des posts</div>}
-        {posts.map((post) => (
-          <div key={post._id} className="post">
-            <h4>{post.title}</h4>
-            <p>{post.content}</p>
-          </div>
-        ))}
+
+        {posts.length === 0 && !loading && !error && (
+          <p className="no-posts">Vous n'avez pas encore publié de posts.</p>
+        )}
+
+        <div className="posts-grid">
+          {posts.map((post) => (
+            <div key={post._id} className="post">
+              <h4>{post.title}</h4>
+              <p>{post.content}</p>
+              <p className="post-date">{new Date(post.createdAt).toLocaleDateString()}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 // redux/store.js
 import { configureStore } from "@reduxjs/toolkit";
-import rootReducer from "./reducers"; // Assure-toi que ton réducteur est correctement configuré
+import rootReducer from "./reducers"; 
 
 const store = configureStore({
   reducer: rootReducer,

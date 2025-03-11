@@ -2,89 +2,97 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchPosts, deletePost } from "../../redux/slices/postsSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp, faRetweet, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import "./css/Posts.css";
 
 const Posts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const posts = useSelector((state) => state.posts.list);
-  const loading = useSelector((state) => state.posts.loading);
-  const error = useSelector((state) => state.posts.error);
-  const [loadingImages, setLoadingImages] = useState({});
-
-  const handleImageLoad = (id) => {
-    setLoadingImages((prevState) => ({
-      ...prevState,
-      [id]: false, // Indique que l'image est chargée
-    }));
-  };
+  const users = useSelector((state) => state.users.list);
+  const authUser = useSelector((state) => state.auth.user); // Utilisateur connecté
+  const [newPost, setNewPost] = useState("");
 
   useEffect(() => {
     dispatch(fetchPosts());
   }, [dispatch]);
 
-  const handleEdit = (id) => {
-    navigate(`/edit_post/${id}`);
+  const handlePostSubmit = () => {
+    console.log("Nouveau post: ", newPost);
+    setNewPost("");
   };
 
-  const handleGet = (id) => {
-    navigate(`/post/${id}`);
+  const handleDelete = (postId) => {
+    dispatch(deletePost(postId));
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("Voulez-vous vraiment supprimer cette recette ?")) {
-      dispatch(deletePost(id))
-        .then(() => {
-          alert("Recette supprimée avec succès !");
-          dispatch(fetchPosts()); // Re-fetch posts after deletion
-        })
-        .catch((error) => {
-          console.error("Erreur lors de la suppression de la recette", error);
-        });
-    }
+  const handleLike = (postId) => {
+    console.log("Like post: ", postId);
   };
 
-  if (loading) {
-    return <div>Chargement...</div>;
-  }
-
-  if (error) {
-    return <div>Erreur : {error}</div>;
-  }
+  const handleRetweet = (postId) => {
+    console.log("Retweet post: ", postId);
+  };
 
   return (
-    <div>
-      <ul>
-        {posts.map((post) => (
-          <li key={post._id}>
-            <p><strong>{post.title}</strong> </p>
-            <p>{post.createdAt}</p>
-            
-            {post.images && post.images.length > 0 && (
-              <div className="post-images">
-                {post.images.map((image, index) => (
-                  <div key={index}>
-                    {loadingImages[post._id] ? (
-                      <div>Chargement de l'image...</div> // Indicateur de chargement
-                    ) : (
-                      <img
-                        src={`/uploads/${image}`}
-                        alt={`Image ${index + 1}`}
-                        className="post-image"
-                        onLoad={() => handleImageLoad(post._id)}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-            <button className="get" onClick={() => handleGet(post._id)}>Voir plus</button>
-            {/* Les boutons Modifier et Supprimer */}
-            {/* <button className="update" onClick={() => handleEdit(post._id)}>Modifier</button>
-            <button className="delete" onClick={() => handleDelete(post._id)}>Effacer</button> */}
-          </li>
-        ))}
-      </ul>
+    <div className="container-posts">
+      <div className="posts-section">
+        <input
+          type="text"
+          placeholder="Quoi de neuf ?"
+          value={newPost}
+          onChange={(e) => setNewPost(e.target.value)}
+          className="new-post-input"
+        />
+        <button onClick={handlePostSubmit} className="post-button">
+          Poster
+        </button>
+
+        <ul>
+          {posts.map((post) => (
+            <li key={post._id} className="post-item">
+              <p><strong>{post.title}</strong></p>
+              <p>{post.createdAt}</p>
+
+              {/* Boutons Modifier/Supprimer si c'est l'auteur */}
+              {authUser && authUser.id === post.userId ? (
+                 <div className="post-actions">
+                 <button onClick={() => navigate(`/post/edit/${post._id}`)}>
+                   <FontAwesomeIcon icon={faEdit} /> Modifier
+                 </button>
+                 <button onClick={() => handleDelete(post._id)} className="delete-button">
+                   <FontAwesomeIcon icon={faTrash} /> Supprimer
+                 </button>
+               </div>
+              ) : (
+                // Sinon, afficher Like et Retweet
+                <div className="post-actions">
+                  <button onClick={() => handleLike(post._id)} className={post.isLiked ? "active" : ""}>
+                    <FontAwesomeIcon icon={faThumbsUp} /> {post.likes > 0 && <span>{post.likes}</span>}
+                  </button>
+                  <button onClick={() => handleRetweet(post._id)} className={post.isRetweeted ? "active" : ""}>
+                    <FontAwesomeIcon icon={faRetweet} /> {post.retweets > 0 && <span>{post.retweets}</span>}
+                  </button>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Liste des utilisateurs */}
+      <div className="users-section">
+        <h3>Utilisateurs à suivre</h3>
+        <ul>
+          {users.map((user) => (
+            <li key={user.id} className="user-item">
+              <p>{user.name}</p>
+              <button onClick={() => console.log("Follow", user.id)}>Follow</button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

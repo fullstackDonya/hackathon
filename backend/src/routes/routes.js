@@ -31,10 +31,16 @@ const {
   deletePost
 } = require("../Controllers/postController");
 
+const { like, unlike } = require('../controllers/likeController');
+const { addSignet, removeSignet ,getUserSignets } = require('../controllers/signetController');
+const { retweetPost , unretweetPost } = require('../controllers/retweetController');
+const { followUser, unfollowUser, getFollowing, getFollowers } = require('../controllers/SubscriptionController');
+const { searchPosts } = require('../controllers/searchController');
+const { getNotifications, markAsRead, markAllAsRead } = require('../controllers/notificationController');
+
 const multer = require('multer');
 const fs = require("fs");
 const path = require("path");
-
 const uploadDirectory = path.join(__dirname, "../Models", "uploads");
 
 if (!fs.existsSync(uploadDirectory)) {
@@ -70,12 +76,39 @@ router.post("/post", upload.single("image"), authMiddleware, createPost);
 router.put("/post/:id", authMiddleware, updatePost);
 router.delete("/post/:id", authMiddleware, deletePost);
 
-// Routes comments
+// Routes Comments
 router.get("/comment/:id", authMiddleware, getCommentById);
 router.post("/comment", authMiddleware, createComment);
 router.put("/comment/:id", authMiddleware, updateComment);
 router.delete("/comment/:id", authMiddleware, deleteComment);
 router.post("/send", authMiddleware, sendComment);
 router.get('/comments/:postId', getCommentsByPostId);
+
+// Routes Like
+router.post('/post/like', authMiddleware, like);
+router.post('/post/unlike' ,authMiddleware, unlike)
+
+// Routes Signet
+router.post('/signet', authMiddleware, addSignet);
+router.delete('/signet', authMiddleware, removeSignet);
+router.get('/signets', authMiddleware, getUserSignets);
+
+// Routes ReTweet
+router.post('/retweet', authMiddleware, retweetPost);
+router.delete('/retweet', authMiddleware, unretweetPost);
+
+//Routes Sub
+router.post('/follow', authMiddleware, followUser);
+router.post('/unfollow', authMiddleware, unfollowUser);
+router.get('/following', authMiddleware, getFollowing);
+router.get('/followers', authMiddleware, getFollowers);
+
+//Routes SearchBar
+router.get('/search', searchPosts);
+
+//Routes Notifications 
+router.get('/notifications', authMiddleware, getNotifications);
+router.put('/:notificationId/read', authMiddleware, markAsRead);
+router.put('/notifications/read-all', authMiddleware, markAllAsRead);
 
 module.exports = router;

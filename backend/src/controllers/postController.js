@@ -47,7 +47,6 @@ const createPost = async (req, res) => {
     }
 };
 
-
 // Update a post by ID
 const updatePost = async (req, res) => {
     try {

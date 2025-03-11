@@ -3,9 +3,10 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
-const http = require("http"); // Importer le module http
+const { setupWebSocket } = require("./websocket");
+const http = require("http");
 // Import des routes
-const routes = require("./routes/routes");
+const routes = require("./Routes/routes");
 
 const app = express();
 const PORT = process.env.PORT || 8083;
@@ -27,10 +28,13 @@ mongoose
 
 app.use("/", routes);
 
-app.use('/Models/uploads', express.static('models/uploads'));  // Pour servir les fichiers statiques
-
-// Créer le serveur HTTP
+// Créer un serveur HTTP
 const server = http.createServer(app);
+
+// Configurer le WebSocket avec le serveur HTTP
+setupWebSocket(server);
+
+app.use('/Models/uploads', express.static('models/uploads'));  // Pour servir les fichiers statiques
 
 // Démarrer le serveur HTTP
 server.listen(PORT, () => {
