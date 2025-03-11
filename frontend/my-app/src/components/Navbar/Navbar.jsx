@@ -13,7 +13,7 @@ const Navbar = () => {
 
       <div className="navbar-logo">
         {/* <img src="/logo.svg" alt="Logo" /> */}
-        <h3>RebootMind</h3>
+        <h3><i class="fa-brands fa-twitter"></i></h3>
       </div>
       <div className="navbar-toggle" onClick={() => setMenuOpen(!menuOpen)}>
         <span></span>

@@ -1,6 +1,6 @@
 .account-container {
-  margin-top: 250px;
-  margin-left:10%;
+  margin-top: 50px;
+  margin-left: 10%;
   max-width: 950px;
   justify-content: center;
   align-items: center;
@@ -9,10 +9,12 @@
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-  color: white;
 }
 
 .account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -20,6 +22,22 @@
 .account-header h2 {
   font-size: 2rem;
   font-weight: bold;
+  color: black !important;
+}
+
+.add-post-button {
+  font-size: 1.5rem;
+  color: black;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s;
+}
+
+.add-post-button:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .account-info {
@@ -29,33 +47,46 @@
 .account-info p {
   font-size: 1.2rem;
   margin: 10px 0;
+  color: black !important;
 }
 
-.account-actions {
+.account-posts {
   margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
 }
 
-.appointments-button,
-.create-appointment-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
+.account-posts h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: black !important;
+}
+
+.post {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.post h4 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: black !important;
+}
+
+.post p {
   font-size: 1rem;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.appointments-button:hover,
-.create-appointment-button:hover {
-  background-color: #45a049;
+  color: black !important;
 }
 
 .loading {
   text-align: center;
   font-size: 1.5rem;
   color: white;
+}
+
+.error {
+  text-align: center;
+  font-size: 1.5rem;
+  color: red;
 }

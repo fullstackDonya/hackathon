@@ -27,11 +27,17 @@ const createPost = async (req, res) => {
         // Vérifier si un fichier a été uploadé
         const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
-        // Créer un nouveau post avec le chemin de l'image
+        // Vérifier que l'auteur est bien fourni
+        if (!req.body.author) {
+            return res.status(400).json({ message: "L'auteur est obligatoire." });
+        }
+
+        // Créer un nouveau post avec l'auteur et l'image
         const post = new Post({
             title: req.body.title,
             content: req.body.content,
-            imageUrl: imageUrl, // Stocke le chemin de l'image
+            author: req.body.author, // Ajout de l'auteur
+            image: imageUrl, // Stocke le chemin de l'image
         });
 
         const newPost = await post.save();

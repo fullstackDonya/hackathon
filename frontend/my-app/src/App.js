@@ -1,4 +1,5 @@
 import React from "react";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store"; 
@@ -22,7 +23,7 @@ function App() {
       <BrowserRouter>
         <Navbar /> 
         <Routes>
-          <Route path="/posts" element={<Posts />} />
+          <Route path="/" element={<Posts />} />
           <Route path="/post/:id" element={<PostDetails />} /> 
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
