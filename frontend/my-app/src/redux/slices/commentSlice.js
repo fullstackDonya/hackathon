@@ -4,9 +4,9 @@ import axios from "../../utils/axiosConfig";
 export const fetchComments = createAsyncThunk(
   "comments/fetchComments",
   async (postId, { getState, rejectWithValue }) => {
-    const { userId, token } = getState().auth;
+    const { token } = getState().auth;
 
-    if (!userId || !token) {
+    if (!token) {
       return rejectWithValue("Utilisateur non connecté");
     }
 
@@ -14,7 +14,6 @@ export const fetchComments = createAsyncThunk(
       const response = await axios.get(`/comments/${postId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          userId: userId,
         },
       });
 
@@ -27,12 +26,11 @@ export const fetchComments = createAsyncThunk(
 
 export const sendComment = createAsyncThunk(
   "comments/sendComment",
-  async ({ sender, postId, content }, { rejectWithValue, getState }) => {
+  async ({ postId, commentData, authToken }, { rejectWithValue }) => {
     try {
-      const { auth } = getState();
-      const response = await axios.post(`/send`, { sender, post: postId, content }, {
+      const response = await axios.post(`/comment`, commentData, {
         headers: {
-          Authorization: `Bearer ${auth.token}`,
+          Authorization: `Bearer ${authToken}`,
           'Content-Type': 'application/json'
         }
       });

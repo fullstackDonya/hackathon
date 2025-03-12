@@ -18,7 +18,7 @@ const sendComment = async (req, res) => {
         });
 
         // Envoyer le commentaire en temps réel via WebSocket
-        const io = req.app.get("io"); // Récupérer `io` depuis `app.js` ou `server.js`
+        const io = req.app.get("io"); // Récupérer `io` depuis `app.js` 
         io.to(post).emit("newComment", savedComment);
 
         res.status(201).json(savedComment);
@@ -49,15 +49,15 @@ const getCommentsByPostId = async (req, res) => {
       }
 
       // Récupérer les commentaires liés à ce post
-      const comments = await Comment.find({ post: postId }) // 🔹 Utilisation correcte du champ "post"
-        .populate('sender', 'name') // 🔹 Populate pour afficher les noms des utilisateurs
-        .sort({ createdAt: 1 }); // 🔹 Trie par date croissante (optionnel)
+      const comments = await Comment.find({ post: postId }) // Utilisation correcte du champ "post"
+        .populate('sender', 'name') // Populate pour afficher les noms des utilisateurs
+        .sort({ createdAt: 1 }); // Trie par date croissante (optionnel)
 
       console.log("🔍 Commentaires en base :", comments);
       
       res.status(200).json(comments);  // Retourner les commentaires
     } catch (error) {
-      console.error("❌ Erreur serveur :", error);
+      console.error("Erreur serveur :", error);
       res.status(500).json({ message: "Erreur serveur" });
     }
 };

@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchPosts, deletePost, createPost } from "../../redux/slices/postsSlice";
 import { fetchUsers } from "../../redux/slices/usersSlice";
+import { fetchComments, sendComment } from "../../redux/slices/commentSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp, faRetweet, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp, faRetweet, faTrash, faEdit, faComment } from "@fortawesome/free-solid-svg-icons";
 import "./css/Posts.css";
 
 const Posts = () => {
@@ -14,8 +15,11 @@ const Posts = () => {
   const users = useSelector((state) => state.users.list);
   const authUserId = useSelector((state) => state.auth.userId); // Utilisateur connecté
   const authToken = useSelector((state) => state.auth.token); // Token d'authentification
+  const comments = useSelector((state) => state.comments.comments);
   const [newPost, setNewPost] = useState("");
   const [image, setImage] = useState(null);
+  const [comment, setComment] = useState("");
+  const [activePostId, setActivePostId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchPosts());
@@ -29,7 +33,7 @@ const Posts = () => {
       return;
     }
     const formData = new FormData();
-    formData.append("title", newPost);
+    formData.append("content", newPost);
     formData.append("author", authUserId);
     if (image) {
       formData.append("image", image);
@@ -46,12 +50,33 @@ const Posts = () => {
   const handleGet = (id) => {
     navigate(`/post/${id}`);
   };
+
   const handleLike = (postId) => {
     console.log("Like post: ", postId);
   };
 
   const handleRetweet = (postId) => {
     console.log("Retweet post: ", postId);
+  };
+
+  const handleCommentClick = (postId) => {
+    if (activePostId === postId) {
+      setActivePostId(null);
+    } else {
+      setActivePostId(postId);
+      dispatch(fetchComments(postId));
+    }
+  };
+
+  const handleCommentSubmit = (postId) => {
+    if (!authUserId || !comment) {
+      console.error("Utilisateur non authentifié ou commentaire vide");
+      return;
+    }
+
+    const commentData = { sender: authUserId, post: postId, content: comment };
+    dispatch(sendComment({ postId, commentData, authToken }));
+    setComment("");
   };
 
   return (
@@ -79,7 +104,7 @@ const Posts = () => {
           <ul>
             {posts.map((post) => (
               <li key={post._id} className="post-item">
-           <  a href="#" onClick={() => handleGet(post._id)} className="post-link">
+                <a href="#" onClick={() => handleGet(post._id)} className="post-link">
                   <p><strong>{post.title}</strong></p>
                   <p>{post.createdAt}</p>
                 </a>
@@ -94,7 +119,7 @@ const Posts = () => {
                     </button>
                   </div>
                 ) : (
-                  // Sinon, afficher Like et Retweet
+                  // Sinon, afficher Like, Retweet et Comment
                   <div className="post-actions">
                     <button onClick={() => handleLike(post._id)} className={post.isLiked ? "active" : ""}>
                       <FontAwesomeIcon icon={faThumbsUp} /> {post.likes > 0 && <span>{post.likes}</span>}
@@ -102,6 +127,28 @@ const Posts = () => {
                     <button onClick={() => handleRetweet(post._id)} className={post.isRetweeted ? "active" : ""}>
                       <FontAwesomeIcon icon={faRetweet} /> {post.retweets > 0 && <span>{post.retweets}</span>}
                     </button>
+                    <button onClick={() => handleCommentClick(post._id)}>
+                      <FontAwesomeIcon icon={faComment} /> {comments[post._id] ? `(${comments[post._id].length})` : ''}
+                    </button>
+                  </div>
+                )}
+                {activePostId === post._id && (
+                  <div className="comments-section">
+                    {comments[post._id] && comments[post._id].map((comment) => (
+                      <div key={comment._id} className="comment">
+                        <p><strong>{comment.sender.name}</strong>: {comment.content}</p>
+                      </div>
+                    ))}
+                    <form onSubmit={(e) => { e.preventDefault(); handleCommentSubmit(post._id); }}>
+                      <input
+                        type="text"
+                        placeholder="Ajouter un commentaire..."
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        className="new-comment-input"
+                      />
+                      <button type="submit" className="comment-button">Envoyer</button>
+                    </form>
                   </div>
                 )}
               </li>

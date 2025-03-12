@@ -44,7 +44,7 @@ const createPost = async (req, res) => {
 
         // Créer un nouveau post avec l'auteur et l'image
         const post = new Post({
-            title: req.body.title,
+            // title: req.body.title,
             content: req.body.content,
             author: req.body.author, // Ajout de l'auteur
             image: imageUrl, // Stocke le chemin de l'image

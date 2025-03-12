@@ -8,8 +8,8 @@ const Home = () => {
       <div className="content">
         <i className="fab fa-twitter fa-5x"></i>
         <div className="links">
-          <a href="/signup" className="link">S'inscrire</a>
-          <a href="/login" className="link">Se connecter</a>
+          <a href="/signup" className="link">Hackaton 2025 G.18</a>
+         
         </div>
       </div>
     </div>

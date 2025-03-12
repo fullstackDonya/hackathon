@@ -16,6 +16,7 @@ import Footer from "./components/Footer/Footer";
 
 import Posts from "./components/Posts/Posts";
 import PostDetails from "./components/Posts/PostDetails";
+import AddPost from "./components/Posts/AddPost";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/post" element={<Posts />} />
+          <Route path="/add-post" element={<AddPost />} />
           <Route path="/post/:id" element={<PostDetails />} /> 
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />

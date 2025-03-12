@@ -74,6 +74,23 @@ export const fetchPostsByUserId = createAsyncThunk(
   }
 );
 
+// Async thunk pour récupérer les commentaires d'un post
+export const fetchCommentsByPostId = createAsyncThunk(
+  'comments/fetchCommentsByPostId',
+  async ({ postId, authToken }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/comments/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      return { postId, comments: response.data };
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 // Async thunk pour créer un nouveau post
 export const createPost = createAsyncThunk(
   'posts/createPost',
@@ -170,6 +187,18 @@ const postsSlice = createSlice({
         state.list = state.list.filter(post => post._id !== action.payload);
       })
       .addCase(deletePost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchCommentsByPostId.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchCommentsByPostId.fulfilled, (state, action) => {
+        state.loading = false;
+        const { postId, comments } = action.payload;
+        state.comments[postId] = comments;
+      })
+      .addCase(fetchCommentsByPostId.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

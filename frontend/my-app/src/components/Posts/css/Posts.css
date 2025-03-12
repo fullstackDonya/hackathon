@@ -1,4 +1,4 @@
-imp.container-posts {
+.container-posts {
   display: flex;
   justify-content: center;
   padding: 20px;
@@ -59,6 +59,39 @@ imp.container-posts {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
+}
+
+.comments-section {
+  margin-top: 10px;
+}
+
+.comment {
+  background: #f5f8fa;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #e1e8ed;
+  margin-bottom: 10px;
+}
+
+.new-comment-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+}
+
+.comment-button {
+  padding: 10px 20px;
+  background-color: #1da1f2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comment-button:hover {
+  background-color: #0d8ddb;
 }
 
 .users-section {
