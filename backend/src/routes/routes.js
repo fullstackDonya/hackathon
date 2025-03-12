@@ -37,7 +37,7 @@ const { addSignet, removeSignet ,getUserSignets } = require('../controllers/sign
 const { retweetPost , unretweetPost } = require('../controllers/retweetController');
 const { followUser, unfollowUser, getFollowing, getFollowers } = require('../controllers/SubscriptionController');
 const { searchPosts } = require('../controllers/searchController');
-const { getNotifications, markAsRead, markAllAsRead } = require('../controllers/notificationController');
+const { getNotifications, markAsRead, markAllAsRead, createNotification } = require('../controllers/notificationController');
 
 const multer = require('multer');
 const fs = require("fs");
@@ -112,8 +112,11 @@ router.get('/followers', authMiddleware, getFollowers);
 router.get('/search', searchPosts);
 
 //Routes Notifications 
+
+// Routes Notifications 
+router.post('/notifications', authMiddleware, createNotification);
 router.get('/notifications', authMiddleware, getNotifications);
-router.put('/:notificationId/read', authMiddleware, markAsRead);
+router.put('/notifications/:id/read', authMiddleware, markAsRead);
 router.put('/notifications/read-all', authMiddleware, markAllAsRead);
 
 module.exports = router;

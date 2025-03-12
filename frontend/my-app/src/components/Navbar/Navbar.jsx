@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { logout } from '../../redux/slices/authSlice';
+import Notifications from '../Notifications/Notifications';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -34,8 +34,10 @@ const Navbar = () => {
           </>
         )}
         {isAuthenticated ? (
-          <li className="logout-button" onClick={handleLogout}>Déconnexion
-          </li>
+          <>
+            <li className="logout-button" onClick={handleLogout}>Déconnexion</li>
+            <li><Notifications /></li>
+          </>
         ) : (
           <>
             <li><Link to="/register" onClick={() => setMenuOpen(false)}>Inscription</Link></li>

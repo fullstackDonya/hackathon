@@ -1,72 +1,53 @@
 const Notification = require('../models/notificationModel');
 
-// 📩 Créer une notification
-const createNotification = async (recipientId, senderId, type, postId = null) => {
+// Créer une notification
+const createNotification = async (req, res) => {
     try {
-        // Vérifie si une notification similaire existe déjà pour éviter les doublons
-        const existingNotification = await Notification.findOne({
-            recipient: recipientId,
-            sender: senderId,
-            type,
-            post: postId
-        });
+        const { user, type, post, sender } = req.body;
 
-        if (!existingNotification) {
-            await Notification.create({
-                recipient: recipientId,
-                sender: senderId,
-                type,
-                post: postId
-            });
-        }
-    } catch (err) {
-        console.error("Erreur lors de la création de la notification :", err);
+        const notification = new Notification({ user, type, post, sender });
+        const savedNotification = await notification.save();
+
+        res.status(201).json(savedNotification);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
-// 🔔 Récupérer les notifications d'un utilisateur
+// Récupérer les notifications d'un utilisateur
 const getNotifications = async (req, res) => {
     try {
-        const userId = req.user.id; // ID de l'utilisateur connecté
-
-        const notifications = await Notification.find({ recipient: userId })
-            .sort({ createdAt: -1 }) 
-            .populate('sender', 'username')
-            .populate('post', 'content');
-
+        const notifications = await Notification.find({ user: req.user.id }).sort({ createdAt: -1 });
         res.status(200).json(notifications);
-    } catch (err) {
-        console.error("Erreur lors de la récupération des notifications :", err);
-        res.status(500).json({ message: "Erreur serveur" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
-// ✅ Marquer une notification comme lue
+// Marquer une notification comme lue
 const markAsRead = async (req, res) => {
     try {
-        const { notificationId } = req.params;
-
-        await Notification.findByIdAndUpdate(notificationId, { isRead: true });
-
-        res.status(200).json({ message: "Notification marquée comme lue" });
-    } catch (err) {
-        console.error("Erreur lors de la mise à jour de la notification :", err);
-        res.status(500).json({ message: "Erreur serveur" });
+        const notification = await Notification.findByIdAndUpdate(req.params.id, { read: true }, { new: true });
+        res.status(200).json(notification);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
-// ✅ Marquer toutes les notifications comme lues
+// Marquer toutes les notifications comme lues
 const markAllAsRead = async (req, res) => {
     try {
-        const userId = req.user.id;
-
-        await Notification.updateMany({ recipient: userId, isRead: false }, { isRead: true });
-
-        res.status(200).json({ message: "Toutes les notifications ont été marquées comme lues" });
-    } catch (err) {
-        console.error("Erreur lors de la mise à jour des notifications :", err);
-        res.status(500).json({ message: "Erreur serveur" });
+        await Notification.updateMany({ user: req.user.id, read: false }, { read: true });
+        res.status(200).json({ message: 'Toutes les notifications ont été marquées comme lues.' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
-module.exports = { createNotification, getNotifications, markAsRead, markAllAsRead };
+module.exports = {
+    createNotification,
+    getNotifications,
+    markAsRead,
+    markAllAsRead
+
+};
