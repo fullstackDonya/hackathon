@@ -1,6 +1,8 @@
-const Comment = require("../models/commentModel");
-const Post = require("../models/postModel");
+const Comment = require('../models/commentModel');
+const Post = require('../models/postModel');
+const { createNotification } = require('./notificationController');
 
+// Envoyer un commentaire
 const sendComment = async (req, res) => {
     try {
         const { sender, post, content } = req.body;
@@ -17,9 +19,11 @@ const sendComment = async (req, res) => {
             $push: { comments: savedComment._id }
         });
 
-        // Envoyer le commentaire en temps réel via WebSocket
-        const io = req.app.get("io"); // Récupérer `io` depuis `app.js` 
-        io.to(post).emit("newComment", savedComment);
+        // Créer une notification pour le propriétaire du post
+        const postOwner = await Post.findById(post).populate('author');
+        if (postOwner) {
+            await createNotification(postOwner.author._id, sender, 'comment', post);
+        }
 
         res.status(201).json(savedComment);
     } catch (error) {
@@ -28,16 +32,7 @@ const sendComment = async (req, res) => {
     }
 };
 
-// Récupérer tous les commentaires (⚠️ Généralement, ce n'est pas recommandé en production)
-const getAllComments = async (req, res) => {
-    try {
-        const comments = await Comment.find().populate("sender", "name");
-        res.status(200).json(comments);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
+// Récupérer les commentaires par ID de post
 const getCommentsByPostId = async (req, res) => {
     const { postId } = req.params;
   
@@ -59,6 +54,20 @@ const getCommentsByPostId = async (req, res) => {
     } catch (error) {
       console.error("Erreur serveur :", error);
       res.status(500).json({ message: "Erreur serveur" });
+    }
+};
+
+module.exports = {
+    sendComment,
+    getCommentsByPostId
+};
+// Récupérer tous les commentaires (⚠️ Généralement, ce n'est pas recommandé en production)
+const getAllComments = async (req, res) => {
+    try {
+        const comments = await Comment.find().populate("sender", "name");
+        res.status(200).json(comments);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -86,7 +95,12 @@ const createComment = async (req, res) => {
 
         const comment = new Comment({ sender, post, content });
         await comment.save();
-
+        
+        // Créer une notification pour le propriétaire du post
+        const postOwner = await Post.findById(post).populate('author');
+        if (postOwner) {
+            await createNotification(postOwner.author._id, sender, 'comment', post);
+        }
         // Renvoie le commentaire créé
         res.status(201).json(comment);
     } catch (error) {

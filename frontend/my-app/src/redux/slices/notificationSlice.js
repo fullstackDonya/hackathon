@@ -79,12 +79,12 @@ const notificationSlice = createSlice({
       .addCase(markNotificationAsRead.fulfilled, (state, action) => {
         const index = state.list.findIndex(notification => notification._id === action.payload._id);
         if (index !== -1) {
-          state.list[index].read = true;
+          state.list[index].isRead = true;
         }
       })
       .addCase(markAllNotificationsAsRead.fulfilled, (state) => {
         state.list.forEach(notification => {
-          notification.read = true;
+          notification.isRead = true;
         });
       });
   },

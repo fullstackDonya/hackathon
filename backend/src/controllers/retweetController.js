@@ -1,57 +1,65 @@
-const Retweet = require('../models/retweetModel');
-const Post = require('../models/postModel');
-const { createNotification } = require('./notificationController');
+const Post = require("../models/postModel");
+const Notification = require("../models/notificationModel");
 
 const retweetPost = async (req, res) => {
     try {
-        const { postId } = req.body;  
-        const userId = req.user.id;   
+        const { postId, userId } = req.body;
 
-        if (!postId) {
-            return res.status(400).json({ message: "L'ID du post est requis" });
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: "Post non trouvé" });
         }
 
-        const existingRetweet = await Retweet.findOne({ post: postId, user: userId });
-        if (existingRetweet) {
+        if (post.retweets.includes(userId)) {
             return res.status(400).json({ message: "Vous avez déjà retweeté ce post" });
         }
 
-        const newRetweet = await Retweet.create({ post: postId, user: userId });
+        post.retweets.push(userId);
+        await post.save();
 
-        const post = await Post.findById(postId);
-        if (post) {
-            await createNotification(post.user, userId, 'retweet', postId);
+        // Créer une notification pour l'auteur du post
+        if (post.author.toString() !== userId) {
+            const notification = new Notification({
+                recipient: post.author,
+                sender: userId,
+                type: 'retweet',
+                post: postId
+            });
+            await notification.save();
         }
 
-        res.status(201).json({ message: "Post retweeté avec succès", retweetId: newRetweet._id });
-    } catch (err) {
-        console.error("Erreur lors du retweet :", err);
+        res.status(200).json(post);
+    } catch (error) {
+        console.error("Erreur serveur :", error);
         res.status(500).json({ message: "Erreur serveur" });
     }
 };
 
 const unretweetPost = async (req, res) => {
     try {
-        const { postId } = req.body;  
-        const userId = req.user.id;   
+        const { postId, userId } = req.body;
 
-        if (!postId) {
-            return res.status(400).json({ message: "L'ID du post est requis" });
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: "Post non trouvé" });
         }
 
-        const existingRetweet = await Retweet.findOne({ post: postId, user: userId });
-
-        if (!existingRetweet) {
+        const index = post.retweets.indexOf(userId);
+        if (index === -1) {
             return res.status(400).json({ message: "Vous n'avez pas retweeté ce post" });
         }
 
-        await Retweet.deleteOne({ post: postId, user: userId });
+        post.retweets.splice(index, 1);
+        await post.save();
 
-        res.status(200).json({ message: "Retweet supprimé avec succès" });
-    } catch (err) {
-        console.error("Erreur lors de la suppression du retweet :", err);
+        res.status(200).json(post);
+    } catch (error) {
+        console.error("Erreur serveur :", error);
         res.status(500).json({ message: "Erreur serveur" });
     }
 };
 
-module.exports = { retweetPost, unretweetPost };
+module.exports = {
+    retweetPost,
+    unretweetPost
+};

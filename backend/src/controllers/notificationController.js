@@ -1,23 +1,21 @@
 const Notification = require('../models/notificationModel');
 
 // Créer une notification
-const createNotification = async (req, res) => {
+const createNotification = async (recipient, sender, type, post) => {
     try {
-        const { user, type, post, sender } = req.body;
-
-        const notification = new Notification({ user, type, post, sender });
-        const savedNotification = await notification.save();
-
-        res.status(201).json(savedNotification);
+        console.log("Création de la notification pour :", recipient, sender, type, post);
+        const notification = new Notification({ recipient, sender, type, post });
+        await notification.save();
+        console.log("Notification créée avec succès :", notification);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Erreur lors de la création de la notification :", error);
     }
 };
 
 // Récupérer les notifications d'un utilisateur
 const getNotifications = async (req, res) => {
     try {
-        const notifications = await Notification.find({ user: req.user.id }).sort({ createdAt: -1 });
+        const notifications = await Notification.find({ recipient: req.user.id }).sort({ createdAt: -1 });
         res.status(200).json(notifications);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -27,7 +25,7 @@ const getNotifications = async (req, res) => {
 // Marquer une notification comme lue
 const markAsRead = async (req, res) => {
     try {
-        const notification = await Notification.findByIdAndUpdate(req.params.id, { read: true }, { new: true });
+        const notification = await Notification.findByIdAndUpdate(req.params.id, { isRead: true }, { new: true });
         res.status(200).json(notification);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -37,7 +35,7 @@ const markAsRead = async (req, res) => {
 // Marquer toutes les notifications comme lues
 const markAllAsRead = async (req, res) => {
     try {
-        await Notification.updateMany({ user: req.user.id, read: false }, { read: true });
+        await Notification.updateMany({ recipient: req.user.id, isRead: false }, { isRead: true });
         res.status(200).json({ message: 'Toutes les notifications ont été marquées comme lues.' });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -49,5 +47,4 @@ module.exports = {
     getNotifications,
     markAsRead,
     markAllAsRead
-
 };

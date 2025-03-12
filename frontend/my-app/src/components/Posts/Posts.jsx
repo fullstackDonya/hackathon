@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchPosts, deletePost, createPost } from "../../redux/slices/postsSlice";
 import { fetchUsers } from "../../redux/slices/usersSlice";
 import { fetchComments, sendComment } from "../../redux/slices/commentSlice";
+import { likePost, unlikePost } from "../../redux/slices/likeSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faRetweet, faTrash, faEdit, faComment } from "@fortawesome/free-solid-svg-icons";
 import "./css/Posts.css";
@@ -51,8 +52,12 @@ const Posts = () => {
     navigate(`/post/${id}`);
   };
 
-  const handleLike = (postId) => {
-    console.log("Like post: ", postId);
+  const handleLike = (postId, isLiked) => {
+    if (isLiked) {
+      dispatch(unlikePost({ postId, authToken }));
+    } else {
+      dispatch(likePost({ postId, authToken }));
+    }
   };
 
   const handleRetweet = (postId) => {
@@ -102,57 +107,60 @@ const Posts = () => {
           </form>
 
           <ul>
-            {posts.map((post) => (
-              <li key={post._id} className="post-item">
-                <a href="#" onClick={() => handleGet(post._id)} className="post-link">
-                  <p><strong>{post.title}</strong></p>
-                  <p>{post.createdAt}</p>
-                </a>
-                {/* Boutons Modifier/Supprimer si c'est l'auteur */}
-                {authUserId && authUserId === post.userId ? (
-                  <div className="post-actions">
-                    <button onClick={() => navigate(`/post/edit/${post._id}`)}>
-                      <FontAwesomeIcon icon={faEdit} /> Modifier
-                    </button>
-                    <button onClick={() => handleDelete(post._id)} className="delete-button">
-                      <FontAwesomeIcon icon={faTrash} /> Supprimer
-                    </button>
-                  </div>
-                ) : (
-                  // Sinon, afficher Like, Retweet et Comment
-                  <div className="post-actions">
-                    <button onClick={() => handleLike(post._id)} className={post.isLiked ? "active" : ""}>
-                      <FontAwesomeIcon icon={faThumbsUp} /> {post.likes > 0 && <span>{post.likes}</span>}
-                    </button>
-                    <button onClick={() => handleRetweet(post._id)} className={post.isRetweeted ? "active" : ""}>
-                      <FontAwesomeIcon icon={faRetweet} /> {post.retweets > 0 && <span>{post.retweets}</span>}
-                    </button>
-                    <button onClick={() => handleCommentClick(post._id)}>
-                      <FontAwesomeIcon icon={faComment} /> {comments[post._id] ? `(${comments[post._id].length})` : ''}
-                    </button>
-                  </div>
-                )}
-                {activePostId === post._id && (
-                  <div className="comments-section">
-                    {comments[post._id] && comments[post._id].map((comment) => (
-                      <div key={comment._id} className="comment">
-                        <p><strong>{comment.sender.name}</strong>: {comment.content}</p>
-                      </div>
-                    ))}
-                    <form onSubmit={(e) => { e.preventDefault(); handleCommentSubmit(post._id); }}>
-                      <input
-                        type="text"
-                        placeholder="Ajouter un commentaire..."
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        className="new-comment-input"
-                      />
-                      <button type="submit" className="comment-button">Envoyer</button>
-                    </form>
-                  </div>
-                )}
-              </li>
-            ))}
+            {posts.map((post) => {
+              const isLiked = post.likes && post.likes.some(like => like.user === authUserId);
+              return (
+                <li key={post._id} className="post-item">
+                  <a href="#" onClick={() => handleGet(post._id)} className="post-link">
+                    <p><strong>{post.content}</strong></p>
+                    <p>{post.createdAt}</p>
+                  </a>
+                  {/* Boutons Modifier/Supprimer si c'est l'auteur */}
+                  {authUserId && authUserId === post.author._id ? (
+                    <div className="post-actions">
+                      <button onClick={() => navigate(`/post/edit/${post._id}`)}>
+                        <FontAwesomeIcon icon={faEdit} /> Modifier
+                      </button>
+                      <button onClick={() => handleDelete(post._id)} className="delete-button">
+                        <FontAwesomeIcon icon={faTrash} /> Supprimer
+                      </button>
+                    </div>
+                  ) : (
+                    // Sinon, afficher Like, Retweet et Comment
+                    <div className="post-actions">
+                      <button onClick={() => handleLike(post._id, isLiked)} className={isLiked ? "active" : ""}>
+                        <FontAwesomeIcon icon={faThumbsUp} /> {post.likes && post.likes.length > 0 && <span>{post.likes.length}</span>}
+                      </button>
+                      <button onClick={() => handleRetweet(post._id)} className={post.retweets && post.retweets.some(retweet => retweet.user === authUserId) ? "active" : ""}>
+                        <FontAwesomeIcon icon={faRetweet} /> {post.retweets && post.retweets.length > 0 && <span>{post.retweets.length}</span>}
+                      </button>
+                      <button onClick={() => handleCommentClick(post._id)}>
+                        <FontAwesomeIcon icon={faComment} /> {post.comments && post.comments.length > 0 && <span>{post.comments.length}</span>}
+                      </button>
+                    </div>
+                  )}
+                  {activePostId === post._id && (
+                    <div className="comments-section">
+                      {comments[post._id] && comments[post._id].map((comment) => (
+                        <div key={comment._id} className="comment">
+                          <p><strong>{comment.sender.name}</strong>: {comment.content}</p>
+                        </div>
+                      ))}
+                      <form onSubmit={(e) => { e.preventDefault(); handleCommentSubmit(post._id); }}>
+                        <input
+                          type="text"
+                          placeholder="Ajouter un commentaire..."
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                          className="new-comment-input"
+                        />
+                        <button type="submit" className="comment-button">Envoyer</button>
+                      </form>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
 

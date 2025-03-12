@@ -3,7 +3,7 @@ const Post = require('../models/postModel');
 const Comment = require('../models/commentModel'); 
 const { createNotification } = require('./notificationController');
 
-const like= async (req, res) => {
+const like = async (req, res) => {
     try {
         const { postId, commentId } = req.body; 
         const userId = req.user.id;
@@ -28,14 +28,14 @@ const like= async (req, res) => {
         });
 
         if (postId) {
-            const post = await Post.findById(postId);
+            const post = await Post.findById(postId).populate('author');
             if (post) {
-                await createNotification(post.user, userId, 'like', postId);
+                await createNotification(post.author._id, userId, 'like', postId);
             }
         } else if (commentId) {
-            const comment = await Comment.findById(commentId);
+            const comment = await Comment.findById(commentId).populate('sender');
             if (comment) {
-                await createNotification(comment.user, userId, 'like', commentId);
+                await createNotification(comment.sender._id, userId, 'like', commentId);
             }
         }
 
@@ -46,7 +46,7 @@ const like= async (req, res) => {
     }
 };
 
-// ❌ Retirer un like (post ou commentaire)
+// Retirer un like (post ou commentaire)
 const unlike = async (req, res) => {
     try {
         const { postId, commentId } = req.body; 

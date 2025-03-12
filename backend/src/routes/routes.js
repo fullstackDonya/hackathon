@@ -83,10 +83,10 @@ router.get("/posts/user/:userId", getPostsByUserId);
 
 // Routes Comments
 router.get("/comment/:id", authMiddleware, getCommentById);
-router.post("/comment", authMiddleware, createComment);
+router.post("/comment",  createComment);
 router.put("/comment/:id", authMiddleware, updateComment);
 router.delete("/comment/:id", authMiddleware, deleteComment);
-router.post("/send", authMiddleware, sendComment);
+router.post("comment/send", authMiddleware, sendComment);
 router.get('/comments/:postId', getCommentsByPostId);
 
 // Routes Like
