@@ -94,12 +94,12 @@ export const fetchCommentsByPostId = createAsyncThunk(
 // Async thunk pour créer un nouveau post
 export const createPost = createAsyncThunk(
   'posts/createPost',
-  async (formData, { rejectWithValue }) => {
+  async ({ formData, authToken }, { rejectWithValue }) => {
     try {
       const response = await axios.post('/post', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${authToken}`,
         },
       });
       return response.data;
@@ -108,7 +108,6 @@ export const createPost = createAsyncThunk(
     }
   }
 );
-
 const postsSlice = createSlice({
   name: 'posts',
   initialState: {
