@@ -4,7 +4,7 @@ import { fetchPostsByUserId, deletePost } from "../../redux/slices/postsSlice";
 import { fetchUserById, fetchUsers } from "../../redux/slices/usersSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faEdit, faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faEdit, faTrash, faPencilAlt, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import "./css/account.css";
 import profileImage from "./img/profile.webp"; 
 
@@ -48,9 +48,10 @@ const Account = () => {
       <div className="account-info">
         <img src={profileImage} alt="Profil" className="profile-image" />
         <div className="account-details">
-          <p> {user.username}</p>
-          <p> {user.email}</p>
-          <p>{user.firstname} - {user.lastname}</p>
+          <p><strong>{user.username}</strong></p>
+          <p>{user.email}</p>
+          <p>{user.firstname} {user.lastname}</p>
+          <p><FontAwesomeIcon icon={faCalendarAlt} /> Membre depuis le {new Date(user.createdAt).toLocaleDateString()}</p>
         </div>
         <button className="edit-profile-button" onClick={() => navigate(`/edit_user/${userId}`)}>
           <FontAwesomeIcon icon={faPencilAlt} />

@@ -39,9 +39,33 @@ const like = async (req, res) => {
             }
         }
 
-        res.status(201).json({ message: "Like ajouté avec succès", like });
+        res.status(201).json({ message: "Like ajouté avec succès", user: userId });
     } catch (err) {
         console.error("Erreur lors du like :", err);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+};
+
+// Récupérer les likes d'un post
+const getLikes = async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const likes = await Like.find({ post: postId }).populate('user', 'username');
+        res.status(200).json(likes);
+    } catch (err) {
+        console.error("Erreur lors de la récupération des likes :", err);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+};
+
+// Récupérer les likes d'un commentaire
+const getCommentLikes = async (req, res) => {
+    try {
+        const { commentId } = req.params;
+        const likes = await Like.find({ comment: commentId }).populate('user', 'username');
+        res.status(200).json(likes);
+    } catch (err) {
+        console.error("Erreur lors de la récupération des likes :", err);
         res.status(500).json({ message: "Erreur serveur" });
     }
 };
@@ -68,11 +92,11 @@ const unlike = async (req, res) => {
         // Suppression du like
         await Like.deleteOne({ _id: existingLike._id });
 
-        res.status(200).json({ message: "Like supprimé avec succès" });
+        res.status(200).json({ message: "Like supprimé avec succès", user: userId });
     } catch (err) {
         console.error("Erreur lors de la suppression du like :", err);
         res.status(500).json({ message: "Erreur serveur" });
     }
 };
 
-module.exports = { like, unlike };
+module.exports = { like, unlike, getLikes, getCommentLikes };

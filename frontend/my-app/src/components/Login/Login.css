@@ -1,18 +1,23 @@
-/* Login.css */
-
 .login-container {
   max-width: 400px;
-  margin: 150px auto; /* Augmentez la marge supérieure pour déplacer le conteneur plus bas */
-  padding: 35px ;
+  margin: 100px auto;
+  padding: 50px;
   border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+  border-radius: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  transition: box-shadow 0.3s ease;
 }
+
+.login-container:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
 .login-container h2 {
   text-align: center;
   margin-bottom: 20px;
   color: #333;
+  font-size: 28px;
 }
 
 .login-container form {
@@ -21,7 +26,7 @@
 }
 
 .login-container form div {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .login-container label {
@@ -33,28 +38,61 @@
 
 .login-container input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   font-size: 16px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
 .login-container input:focus {
-  border-color: #007bff;
+  border-color: #1da1f2;
   outline: none;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 8px rgba(29, 161, 242, 0.5);
 }
 
 .login-container button {
-  padding: 10px;
-  background-color: #007bff;
+  padding: 12px;
+  background: linear-gradient(135deg, #1da1f2, #0d8ddb);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .login-container button:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #0d8ddb, #0b79c1);
+}
+
+.login-container .register-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #1da1f2;
+}
+
+.login-container .register-link a {
+  color: #1da1f2;
+  text-decoration: none;
+  transition: text-decoration 0.3s ease;
+}
+
+.login-container .register-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-container {
+    padding: 20px;
+  }
+
+  .login-container h2 {
+    font-size: 24px;
+  }
+
+  .login-container input, .login-container button {
+    font-size: 14px;
+  }
 }

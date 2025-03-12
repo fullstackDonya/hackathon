@@ -59,7 +59,23 @@ const unretweetPost = async (req, res) => {
     }
 };
 
+// Récupérer les retweets d'un post
+const getRetweets = async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const post = await Post.findById(postId).populate('retweets', 'username');
+        if (!post) {
+            return res.status(404).json({ message: "Post non trouvé" });
+        }
+        res.status(200).json(post.retweets);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des retweets :", error);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+};
+
 module.exports = {
     retweetPost,
-    unretweetPost
+    unretweetPost,
+    getRetweets
 };

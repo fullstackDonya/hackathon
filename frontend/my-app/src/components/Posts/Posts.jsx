@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { fetchPosts, deletePost, createPost } from "../../redux/slices/postsSlice";
 import { fetchUsers } from "../../redux/slices/usersSlice";
 import { fetchComments, sendComment } from "../../redux/slices/commentSlice";
-import { likePost, unlikePost } from "../../redux/slices/likeSlice";
+import { likePost, unlikePost, fetchLikes, likeComment, unlikeComment } from "../../redux/slices/likeSlice";
+import { retweetPost, unretweetPost } from "../../redux/slices/retweetSlice";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faRetweet, faTrash, faEdit, faComment } from "@fortawesome/free-solid-svg-icons";
 import "./css/Posts.css";
@@ -17,6 +19,9 @@ const Posts = () => {
   const authUserId = useSelector((state) => state.auth.userId); // Utilisateur connecté
   const authToken = useSelector((state) => state.auth.token); // Token d'authentification
   const comments = useSelector((state) => state.comments.comments);
+  const likes = useSelector((state) => state.likes.likes);
+  const commentLikes = useSelector((state) => state.likes.commentLikes);
+  const retweets = useSelector((state) => state.retweets.retweets);
   const [newPost, setNewPost] = useState("");
   const [image, setImage] = useState(null);
   const [comment, setComment] = useState("");
@@ -24,8 +29,18 @@ const Posts = () => {
 
   useEffect(() => {
     dispatch(fetchPosts());
-    dispatch(fetchUsers()); // Récupérer les utilisateurs
+    dispatch(fetchUsers());
   }, [dispatch]);
+  
+  // Charger les commentaires et les likes uniquement quand les posts sont disponibles
+  useEffect(() => {
+    if (posts.length > 0) {
+      posts.forEach((post) => {
+        dispatch(fetchComments(post._id));
+        dispatch(fetchLikes(post._id));
+      });
+    }
+  }, [posts, dispatch]);
 
   const handlePostSubmit = (e) => {
     e.preventDefault();
@@ -60,8 +75,20 @@ const Posts = () => {
     }
   };
 
-  const handleRetweet = (postId) => {
-    console.log("Retweet post: ", postId);
+  const handleCommentLike = (commentId, isLiked) => {
+    if (isLiked) {
+      dispatch(unlikeComment({ commentId, authToken }));
+    } else {
+      dispatch(likeComment({ commentId, authToken }));
+    }
+  };
+
+  const handleRetweet = (postId, isRetweeted) => {
+    if (isRetweeted) {
+      dispatch(unretweetPost({ postId, authToken }));
+    } else {
+      dispatch(retweetPost({ postId, authToken }));
+    }
   };
 
   const handleCommentClick = (postId) => {
@@ -108,7 +135,8 @@ const Posts = () => {
 
           <ul>
             {posts.map((post) => {
-              const isLiked = post.likes && post.likes.some(like => like.user === authUserId);
+              const isLiked = likes[post._id]?.some(like => like.user === authUserId);
+              const isRetweeted = post.retweets && post.retweets.some(retweet => retweet.user === authUserId);
               return (
                 <li key={post._id} className="post-item">
                   <a href="#" onClick={() => handleGet(post._id)} className="post-link">
@@ -126,26 +154,37 @@ const Posts = () => {
                       </button>
                     </div>
                   ) : (
-                    // Sinon, afficher Like, Retweet et Comment
                     <div className="post-actions">
-                      <button onClick={() => handleLike(post._id, isLiked)} className={isLiked ? "active" : ""}>
-                        <FontAwesomeIcon icon={faThumbsUp} /> {post.likes && post.likes.length > 0 && <span>{post.likes.length}</span>}
-                      </button>
-                      <button onClick={() => handleRetweet(post._id)} className={post.retweets && post.retweets.some(retweet => retweet.user === authUserId) ? "active" : ""}>
-                        <FontAwesomeIcon icon={faRetweet} /> {post.retweets && post.retweets.length > 0 && <span>{post.retweets.length}</span>}
-                      </button>
-                      <button onClick={() => handleCommentClick(post._id)}>
-                        <FontAwesomeIcon icon={faComment} /> {post.comments && post.comments.length > 0 && <span>{post.comments.length}</span>}
-                      </button>
-                    </div>
+                    {/* Bouton Like */}
+                    <button onClick={() => handleLike(post._id, isLiked)} className={isLiked ? "active" : ""}>
+                      <FontAwesomeIcon icon={faThumbsUp} /> <span>{likes[post._id]?.length || 0}</span>
+                    </button>
+                  
+                    {/* Bouton Retweet */}
+                    <button onClick={() => handleRetweet(post._id, isRetweeted)} className={isRetweeted ? "active" : ""}>
+                      <FontAwesomeIcon icon={faRetweet} /> <span>{retweets[post._id]?.length || 0}</span>
+                    </button>
+                  
+                    {/* Bouton Commentaire */}
+                    <button onClick={() => handleCommentClick(post._id)}>
+                      <FontAwesomeIcon icon={faComment} /> <span>{comments[post._id]?.length || 0}</span>
+                    </button>
+                  </div>
+                  
                   )}
                   {activePostId === post._id && (
                     <div className="comments-section">
-                      {comments[post._id] && comments[post._id].map((comment) => (
-                        <div key={comment._id} className="comment">
-                          <p><strong>{comment.sender.name}</strong>: {comment.content}</p>
-                        </div>
-                      ))}
+                      {comments[post._id] && comments[post._id].map((comment) => {
+                        const isCommentLiked = commentLikes[comment._id]?.some(like => like.user === authUserId);
+                        return (
+                          <div key={comment._id} className="comment">
+                            <p><strong>{comment.sender.name}</strong>: {comment.content}</p>
+                            <button onClick={() => handleCommentLike(comment._id, isCommentLiked)} className={isCommentLiked ? "active" : ""}>
+                              <FontAwesomeIcon icon={faThumbsUp} /> <span>{commentLikes[comment._id]?.length || 0}</span>
+                            </button>
+                          </div>
+                        );
+                      })}
                       <form onSubmit={(e) => { e.preventDefault(); handleCommentSubmit(post._id); }}>
                         <input
                           type="text"

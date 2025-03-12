@@ -18,7 +18,9 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }], 
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Like' }], // Ajout du champ likes
+    retweets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Ajout du champ retweets
     createdAt: {
         type: Date,
         default: Date.now

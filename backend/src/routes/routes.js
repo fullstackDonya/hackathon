@@ -32,12 +32,29 @@ const {
   getPostsByUserId
 } = require("../controllers/postController");
 
-const { like, unlike } = require('../controllers/likeController');
+const {
+  like,
+  unlike,
+  getLikes,
+  getCommentLikes
+
+} = require('../controllers/likeController');
+
 const { addSignet, removeSignet ,getUserSignets } = require('../controllers/signetController');
-const { retweetPost , unretweetPost } = require('../controllers/retweetController');
+const { 
+  retweetPost,
+  unretweetPost,
+  getRetweets
+} = require('../controllers/retweetController');
+
 const { followUser, unfollowUser, getFollowing, getFollowers } = require('../controllers/SubscriptionController');
 const { searchPosts } = require('../controllers/searchController');
-const { getNotifications, markAsRead, markAllAsRead, createNotification } = require('../controllers/notificationController');
+const { 
+  getNotifications, 
+  markAsRead, 
+  markAllAsRead, 
+  createNotification 
+} = require('../controllers/notificationController');
 
 const multer = require('multer');
 const fs = require("fs");
@@ -91,7 +108,11 @@ router.get('/comments/:postId', getCommentsByPostId);
 
 // Routes Like
 router.post('/post/like', authMiddleware, like);
-router.post('/post/unlike' ,authMiddleware, unlike)
+router.post('/post/unlike', authMiddleware, unlike);
+router.get('/post/:postId/likes', getLikes);
+router.post('/comment/like', authMiddleware, like);
+router.post('/comment/unlike', authMiddleware, unlike);
+router.get('/comment/:commentId/likes', getCommentLikes);
 
 // Routes Signet
 router.post('/signet', authMiddleware, addSignet);
@@ -101,6 +122,7 @@ router.get('/signets', authMiddleware, getUserSignets);
 // Routes ReTweet
 router.post('/retweet', authMiddleware, retweetPost);
 router.delete('/retweet', authMiddleware, unretweetPost);
+router.get('/post/:postId/retweets', getRetweets);
 
 //Routes Sub
 router.post('/follow', authMiddleware, followUser);

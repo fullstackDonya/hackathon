@@ -5,6 +5,7 @@ import usersReducer from './slices/usersSlice';
 import postsReducer from './slices/postsSlice';
 import notificationReducer from './slices/notificationSlice';
 import likesReducer from './slices/likeSlice';
+import retweetReducer from './slices/retweetSlice';
 
 const rootReducer = combineReducers({
   posts: postsReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   users: usersReducer,
   notifications: notificationReducer,
   likes: likesReducer,
+  retweets: retweetReducer,
 });
 
 export default rootReducer;
