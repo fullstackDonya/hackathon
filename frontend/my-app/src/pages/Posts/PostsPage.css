@@ -2,19 +2,22 @@
     display: flex;
     justify-content: center;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #15202b;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: #222;
+    color: #ffffff;
+  }
+  
+  .main {
+    max-width: 2000px;
+    width: 100%;
   }
   
   .main-content {
     display: flex;
-    width: 100%;
-    max-width: 1200px;
   }
   
   .left-section {
-    width: 25%;
+    width: 30%;
     padding-right: 20px;
   }
   
@@ -24,7 +27,7 @@
   }
   
   .right-section {
-    width: 25%;
+    width: 20%;
     padding-left: 20px;
   }
   
@@ -34,89 +37,160 @@
     margin-bottom: 20px;
     position: sticky;
     top: 0;
-    background-color: #fff;
+    background-color: #15202b;
     padding: 10px 0;
     z-index: 10;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #38444d;
   }
   
   .toggle-section button {
     padding: 10px 20px;
-    background-color: #f0f0f0;
+    background-color: transparent;
     border: none;
     border-radius: 30px;
     cursor: pointer;
     font-size: 15px;
     font-weight: bold;
     margin: 0 10px;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: background-color 0.3s;
+    color: #8899a6;
+    display: flex;
+    align-items: center;
   }
   
   .toggle-section button.active {
-    background-color: #444;
+    background-color: #1da1f2;
     color: white;
   }
   
   .toggle-section button:hover {
-    background-color: #555;
+    background-color: #0d8ddb;
     color: white;
-    transform: scale(1.05);
+  }
+  
+  .search-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .new-post-section {
+    margin-bottom: 20px;
   }
   
   .post-item {
-    background: #fff;
+    list-style: none;
+    background: #192734;
     padding: 15px;
     margin-bottom: 12px;
     border-radius: 15px;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
     transition: box-shadow 0.3s;
   }
   
   .post-item:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
   }
   
   .post-link {
     text-decoration: none;
-    color: #333;
+    color: #ffffff;
   }
   
   .post-link:hover {
-    background-color: #f0f0f0;
+    background-color: #253341;
+  }
+  
+  .post-date {
+    font-size: 12px;
+    color: #8899a6;
+  }
+  
+  .post-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .post-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #8899a6;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+  
+  .post-actions button.active {
+    color: #1da1f2;
+  }
+  
+  .post-actions button:hover {
+    color: #0d8ddb;
+  }
+  
+  .post-actions button span {
+    margin-left: 5px;
+  }
+  
+  .comments-section {
+    margin-top: 10px;
+  }
+  
+  .comment {
+    background: #192734;
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid #38444d;
+    margin-bottom: 10px;
+  }
+  
+  .new-comment-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #38444d;
+    border-radius: 30px;
+    font-size: 14px;
+    outline: none;
+    background-color: #253341;
+    color: #ffffff;
   }
   
   .comment-button {
     padding: 10px 20px;
-    background-color: #444;
+    background-color: #1da1f2;
     color: white;
     border: none;
     border-radius: 30px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: background-color 0.3s;
   }
   
   .comment-button:hover {
-    background-color: #555;
-    transform: scale(1.05);
+    background-color: #0d8ddb;
+  }
+  
+  .users-section {
+    margin-top: 20px;
   }
   
   .user-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #fff;
+    background: #192734;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 15px;
-    border: 1px solid #ddd;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #38444d;
   }
   
   .follow-button {
     padding: 8px 16px;
-    background-color: #444;
+    background-color: #1da1f2;
     color: white;
     border: none;
     border-radius: 30px;
@@ -127,7 +201,7 @@
   }
   
   .follow-button:hover {
-    background-color: #555;
+    background-color: #0d8ddb;
   }
   
   /* Responsive Design */

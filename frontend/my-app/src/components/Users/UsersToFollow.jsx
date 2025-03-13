@@ -26,7 +26,7 @@ const UsersToFollow = () => {
 
   return (
     <div className="users-section">
-      <h3>Utilisateurs à suivre</h3>
+      <h1><i class="fa-solid fa-users"></i></h1>
       <ul>
         {users.map((user) => (
           <li key={user._id} className="user-item">

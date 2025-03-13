@@ -21,7 +21,11 @@ const Search = () => {
   };
 
   return (
+ 
+
     <div className="search-container">
+        <h3>Rechercher des posts</h3>
+   
       <form onSubmit={handleSearch}>
         <input
           type="text"

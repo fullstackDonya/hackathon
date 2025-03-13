@@ -62,7 +62,7 @@ const Register = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleRegister} disabled={loading}>
-        {loading ? "Enregistrement..." : "Register"}
+        {loading ? "Enregistrement..." : "Continuer"}
       </button>
       {error && <p className="error">{error}</p>}
     </div>

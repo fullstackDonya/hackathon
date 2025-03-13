@@ -4,60 +4,63 @@
   padding: 40px;
   border: none;
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  background: linear-gradient(145deg, #ffffff, #f3f4f6);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* Ombre plus prononcée pour un effet en relief */
+  background: #1c1f23; /* Fond sombre */
   transition: box-shadow 0.3s ease;
 }
 
 .register-form:hover {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5); /* Ombre plus marquée au survol */
 }
 
 .register-form h1 {
   text-align: center;
   margin-bottom: 30px;
-  color: #1a202c;
-  font-size: 28px;
+  color: #e1e8ed; /* Texte clair pour contraster avec le fond sombre */
+  font-size: 20px;
   font-weight: bold;
 }
 
 .register-form input {
-  width: 100%;
+  width: 93%;
   padding: 12px;
   margin: 12px 0;
-  border: 1px solid #d1d5db;
+  border: 1px solid #444; /* Bordure foncée */
   border-radius: 8px;
   font-size: 16px;
+  background: #2f3336; /* Fond sombre pour les champs */
+  color: #e1e8ed; /* Texte clair */
   transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
 .register-form input:focus {
-  border-color: #1da1f2;
+  border-color: #1da1f2; /* Bleu X au focus */
   outline: none;
-  box-shadow: 0 0 8px rgba(29, 161, 242, 0.4);
+  box-shadow: 0 0 8px rgba(29, 161, 242, 0.5);
 }
 
 .register-form button {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(145deg, #1da1f2, #0d8ddb);
+  background: linear-gradient(145deg, #1da1f2, #0d8ddb); /* Bleu X */
   border: none;
   color: white;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .register-form button:hover {
-  background: linear-gradient(145deg, #0d8ddb, #0b7bb7);
+  background: linear-gradient(145deg, #0d8ddb, #0b7bb7); /* Bleu plus foncé au survol */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .register-form .login-link {
   text-align: center;
   margin-top: 15px;
-  color: #1da1f2;
+  color: #1da1f2; /* Bleu pour les liens */
   font-size: 14px;
 }
 
@@ -68,7 +71,7 @@
 }
 
 .register-form .login-link a:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* Soulignement au survol */
 }
 
 /* Responsive Design */

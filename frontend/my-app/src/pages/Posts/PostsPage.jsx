@@ -72,46 +72,52 @@ const PostsPage = () => {
 
   return (
     <div className="posts-page-container">
-      <div className="main-content">
-        <div className="left-section">
-          <div className="toggle-section">
-            <button onClick={handleToggle} className={showActualite ? "active" : ""}>
-              <FontAwesomeIcon icon={faNewspaper} /> Actualité
-            </button>
-            <button onClick={handleToggle} className={!showActualite ? "active" : ""}>
-              <FontAwesomeIcon icon={faCompass} /> Explorer
-            </button>
-          </div>
-          <Search />
-          {showActualite ? (
-            <Actualite
-              posts={posts}
-              comments={comments}
-              likes={likes}
-              retweets={retweets}
-              signets={signets}
-              authUserId={authUserId}
-              authToken={authToken}
-              handleCommentClick={setActivePostId}
-              handleCommentSubmit={handleCommentSubmit}
-              handleDelete={handleDelete}
-              activePostId={activePostId}
-              commentLikes={commentLikes}
-              handleCommentLike={handleCommentLike}
-              comment={comment}
-              setComment={setComment}
-            />
-          ) : (
-            <Tendances />
-          )}
+        <div className="main">
+            <AddPost />
+            <div className="main-content">
+                <div className="left-section">
+                <div className="search-title">
+                    <h1><i class="fa-brands fa-searchengin"></i></h1>
+                </div>
+                <Search />
+            
+                </div>
+                <div className="center-section">
+                <div className="toggle-section">
+                    <button onClick={handleToggle} className={showActualite ? "active" : ""}>
+                    <FontAwesomeIcon icon={faNewspaper} /> Actualité
+                    </button>
+                    <button onClick={handleToggle} className={!showActualite ? "active" : ""}>
+                    <FontAwesomeIcon icon={faCompass} /> Explorer
+                    </button>
+                </div>
+                {showActualite ? (
+                    <Actualite
+                    posts={posts}
+                    comments={comments}
+                    likes={likes}
+                    retweets={retweets}
+                    signets={signets}
+                    authUserId={authUserId}
+                    authToken={authToken}
+                    handleCommentClick={setActivePostId}
+                    handleCommentSubmit={handleCommentSubmit}
+                    handleDelete={handleDelete}
+                    activePostId={activePostId}
+                    commentLikes={commentLikes}
+                    handleCommentLike={handleCommentLike}
+                    comment={comment}
+                    setComment={setComment}
+                    />
+                ) : (
+                    <Tendances />
+                )}
+                </div>
+                <div className="right-section">
+                <UsersToFollow />
+                </div>
+            </div>
         </div>
-        <div className="center-section">
-          <AddPost />
-        </div>
-        <div className="right-section">
-          <UsersToFollow />
-        </div>
-      </div>
     </div>
   );
 };

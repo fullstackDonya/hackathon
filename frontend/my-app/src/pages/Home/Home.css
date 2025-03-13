@@ -1,34 +1,46 @@
+/* Home.css */
 .home {
-    background-color: black;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-  
-  .content {
-    text-align: center;
-    color: white;
-    position: absolute;
-  }
-  
-  .fab.fa-twitter {
-    color: white;
-  }
-  
-  .links {
-    margin-top: 20px;
-  }
-  
-  .link {
-    color: white;
-    margin: 0 10px;
-    font-size: 20px;
-    text-decoration: none;
-  }
-  
-  .link:hover {
-    text-decoration: underline;
-  }
-  
+  background-color: black;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.content {
+  text-align: center;
+  color: white;
+  position: absolute;
+}
+
+.fab.fa-twitter {
+  color: white;
+}
+
+.card-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.card {
+  background: #1e2021;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  text-decoration: none;
+  transition: transform 0.3s, box-shadow 0.3s;
+  width: 180px;
+}
+
+.card i {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(29, 161, 242, 0.5);
+}

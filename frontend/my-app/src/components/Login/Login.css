@@ -2,21 +2,21 @@
   max-width: 400px;
   margin: 100px auto;
   padding: 50px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  border: 1px solid #2f3336; /* Bordure plus sombre pour le thème */
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Ombre plus marquée */
+  background: #1c1f23; /* Fond sombre pour correspondre au thème X sombre */
   transition: box-shadow 0.3s ease;
 }
 
 .login-container:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .login-container h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #333;
+  color: #e1e8ed; /* Texte clair pour contraster avec le fond sombre */
   font-size: 28px;
 }
 
@@ -33,43 +33,46 @@
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #555;
+  color: #aab8c2; /* Couleur claire pour les labels dans le thème sombre */
 }
 
 .login-container input {
-  width: 100%;
+  width: 85%;
   padding: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid #444; /* Bordure plus sombre */
   border-radius: 8px;
   font-size: 16px;
+  color: #e1e8ed; /* Texte clair dans les champs de saisie */
+  background-color: #2f3336; /* Fond sombre dans les champs de saisie */
   transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
 .login-container input:focus {
-  border-color: #1da1f2;
+  border-color: #1da1f2; /* Garde le bleu vif pour l'état focus */
   outline: none;
   box-shadow: 0 0 8px rgba(29, 161, 242, 0.5);
 }
 
 .login-container button {
   padding: 12px;
-  background: linear-gradient(135deg, #1da1f2, #0d8ddb);
+  background: #1da1f2; /* Bleu de Twitter pour le bouton */
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 11px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .login-container button:hover {
-  background: linear-gradient(135deg, #0d8ddb, #0b79c1);
+  background: #1991db;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .login-container .register-link {
   text-align: center;
   margin-top: 20px;
-  color: #1da1f2;
+  color: #1da1f2; /* Lien en bleu clair */
 }
 
 .login-container .register-link a {
