@@ -7,9 +7,8 @@ const initialState = {
     error: null,
 };
 
-// Actions asynchrones
-export const fetchSignets = createAsyncThunk(
-    'signets/fetchSignets',
+export const getUserSignets = createAsyncThunk(
+    'signets/getUserSignets',
     async (_, { rejectWithValue }) => {
         try {
             const response = await axios.get('/signets', {
@@ -17,7 +16,7 @@ export const fetchSignets = createAsyncThunk(
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             });
-            return response.data;
+            return response.data;  // On suppose que la réponse contient un tableau des signets de l'utilisateur
         } catch (error) {
             return rejectWithValue(error.response?.data || 'Erreur serveur');
         }
@@ -29,7 +28,7 @@ export const addSignet = createAsyncThunk(
     async ({ postId, authToken }, { rejectWithValue }) => {
         try {
             const response = await axios.post(
-                '/signets',
+                '/signet',  
                 { postId },
                 {
                     headers: {
@@ -37,7 +36,7 @@ export const addSignet = createAsyncThunk(
                     },
                 }
             );
-            return response.data;
+            return response.data;  
         } catch (error) {
             return rejectWithValue(error.response?.data || 'Erreur serveur');
         }
@@ -48,12 +47,13 @@ export const removeSignet = createAsyncThunk(
     'signets/removeSignet',
     async ({ postId, authToken }, { rejectWithValue }) => {
         try {
-            const response = await axios.delete(`/signets/${postId}`, {
+            const response = await axios.delete(`/signet`, {  
+                data: { postId },
                 headers: {
                     Authorization: `Bearer ${authToken}`,
                 },
             });
-            return response.data;
+            return response.data; 
         } catch (error) {
             return rejectWithValue(error.response?.data || 'Erreur serveur');
         }
@@ -66,15 +66,15 @@ const signetSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchSignets.pending, (state) => {
+            .addCase(getUserSignets.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchSignets.fulfilled, (state, action) => {
+            .addCase(getUserSignets.fulfilled, (state, action) => {
                 state.loading = false;
                 state.signets = action.payload;
             })
-            .addCase(fetchSignets.rejected, (state, action) => {
+            .addCase(getUserSignets.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

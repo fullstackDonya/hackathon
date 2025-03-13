@@ -4,7 +4,7 @@ import { fetchPosts, deletePost } from "../../redux/slices/postsSlice";
 import { fetchUsers } from "../../redux/slices/usersSlice";
 import { fetchComments, sendComment } from "../../redux/slices/commentSlice";
 import { fetchLikes, unlikeComment, likeComment } from "../../redux/slices/likeSlice";
-import { fetchSignets } from "../../redux/slices/signetSlice";
+import { getUserSignets } from "../../redux/slices/signetSlice";
 import Actualite from "../../components/Posts/Actualite";
 import Tendances from "../../components/Posts/Tendances";
 import Search from "../../components/Search/Search";
@@ -23,7 +23,7 @@ const PostsPage = () => {
   const likes = useSelector((state) => state.likes.likes);
   const commentLikes = useSelector((state) => state.likes.commentLikes);
   const retweets = useSelector((state) => state.retweets.retweets);
-  const signets = useSelector((state) => state.signets.signets);
+  const signets = useSelector((state) => state.signets.signets) || [];
   const [showActualite, setShowActualite] = useState(true);
   const [activePostId, setActivePostId] = useState(null);
   const [comment, setComment] = useState("");
@@ -31,7 +31,7 @@ const PostsPage = () => {
   useEffect(() => {
     dispatch(fetchPosts());
     dispatch(fetchUsers());
-    dispatch(fetchSignets());
+    dispatch(getUserSignets());
   }, [dispatch]);
 
   useEffect(() => {

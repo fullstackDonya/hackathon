@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPostsByUserId, deletePost } from "../../redux/slices/postsSlice";
 import { fetchUserById, fetchUsers } from "../../redux/slices/usersSlice";
-import { fetchSignets } from "../../redux/slices/signetSlice";
+import {getUserSignets } from "../../redux/slices/signetSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faEdit, faTrash, faPencilAlt, faCalendarAlt, faBookmark } from "@fortawesome/free-solid-svg-icons";
@@ -26,7 +26,7 @@ const Account = () => {
       dispatch(fetchUserById(userId));
       dispatch(fetchPostsByUserId(userId));
       dispatch(fetchUsers());
-      dispatch(fetchSignets());
+      dispatch(getUserSignets ());
     }
   }, [dispatch, userId]);
 

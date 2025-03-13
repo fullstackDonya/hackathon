@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faRetweet, faTrash, faEdit, faComment, faBookmark } from "@fortawesome/free-solid-svg-icons";
 import "./css/Actualite.css";
 
-const Actualite = ({ posts, comments, likes, retweets, signets, authUserId, authToken, handleCommentClick, handleCommentSubmit, handleDelete, activePostId, commentLikes, handleCommentLike, comment, setComment }) => {
+const Actualite = ({ posts, comments, likes, retweets, signets = [], authUserId, authToken, handleCommentClick, handleCommentSubmit, handleDelete, activePostId, commentLikes, handleCommentLike, comment, setComment }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -42,7 +42,7 @@ const Actualite = ({ posts, comments, likes, retweets, signets, authUserId, auth
         {posts.map((post) => {
           const isLiked = likes[post._id]?.some(like => like.user === authUserId);
           const isRetweeted = post.retweets && post.retweets.some(retweet => retweet.user === authUserId);
-          const isSignet = signets.some(signet => signet.post._id === post._id);
+          const isSignet = Array.isArray(signets) && signets.some(signet => signet.post._id === post._id);
           return (
             <li key={post._id} className="post-item">
               <a href="#" onClick={() => navigate(`/post/${post._id}`)} className="post-link">
