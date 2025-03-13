@@ -14,7 +14,7 @@ import Logout from "./components/Logout/Logout";
 import Home from "./pages/Home/Home";
 import Footer from "./components/Footer/Footer";
 import Favorites from "./components/Favorites/Favorites";
-import Posts from "./components/Posts/Posts";
+import PostsPage  from "./pages/Posts/PostsPage";
 import PostDetails from "./components/Posts/PostDetails";
 import AddPost from "./components/Posts/AddPost";
 
@@ -25,7 +25,7 @@ function App() {
         <Navbar /> 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/post" element={<Posts />} />
+          <Route path="/post" element={<PostsPage  />} />
           <Route path="/add-post" element={<AddPost />} />
           <Route path="/post/:id" element={<PostDetails />} /> 
           <Route path="/register" element={<Register />} />
@@ -36,6 +36,7 @@ function App() {
           <Route path="/edit_user/:id" element={<UpdateUser />} />
           <Route path="/account" element={<Account />} />
           <Route path="/favorites" element={<Favorites />} />
+          
 
         </Routes>
         <Footer />

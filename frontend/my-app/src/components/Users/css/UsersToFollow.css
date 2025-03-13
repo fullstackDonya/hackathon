@@ -1,39 +1,54 @@
 .users-section {
-  margin-top: 20px;
-}
-
-.users-section h3 {
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.users-section ul {
-  list-style: none;
-  padding: 0;
-}
-
-.user-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #f5f8fa;
-  border-radius: 8px;
-  border: 1px solid #e1e8ed;
-}
-
-.follow-button {
-  padding: 8px 16px;
-  background-color: #1da1f2;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
-}
-
-.follow-button:hover {
-  background-color: #0d8ddb;
-}
+    margin-top: 20px;
+  }
+  
+  .users-section h3 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .users-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f5f8fa;
+    border-radius: 8px;
+    border: 1px solid #e1e8ed;
+  }
+  
+  .follow-button {
+    padding: 8px 16px;
+    background-color: #1da1f2;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  .follow-button:hover {
+    background-color: #0d8ddb;
+  }
+  
+  .unfollow-button {
+    background-color: #fff;
+    color: #1da1f2;
+    border: 1px solid #1da1f2;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .unfollow-button:hover {
+    background-color: #ffefef;
+    color: #dc3545;
+    border-color: #dc3545;
+  }

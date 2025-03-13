@@ -1,43 +1,47 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from '../../utils/axiosConfig';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
-const initialState = {
-  results: [],
-  loading: false,
-  error: null,
-};
-
+// Action pour rechercher des posts en fonction d'un terme
 export const searchPosts = createAsyncThunk(
-  'search/searchPosts',
-  async ({ searchTerm }, { rejectWithValue }) => {
+  "search/fetchPosts",
+  async (searchTerm, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/search?term=${searchTerm}`);
-      return response.data;
+      const response = await axios.get(`http://localhost:8082/search?searchTerm=${searchTerm}`);
+      return response.data.posts;
     } catch (error) {
-      return rejectWithValue(error.response?.data || 'Erreur serveur');
+      return rejectWithValue(error.response.data.message || "Erreur lors de la recherche");
     }
   }
 );
 
 const searchSlice = createSlice({
-  name: 'search',
-  initialState,
-  reducers: {},
+  name: "search",
+  initialState: {
+    results: [],
+    status: "idle",
+    error: null,
+  },
+  reducers: {
+    clearSearchResults: (state) => {
+      state.results = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(searchPosts.pending, (state) => {
-        state.loading = true;
+        state.status = "loading";
         state.error = null;
       })
       .addCase(searchPosts.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "succeeded";
         state.results = action.payload;
       })
       .addCase(searchPosts.rejected, (state, action) => {
-        state.loading = false;
+        state.status = "failed";
         state.error = action.payload;
       });
   },
 });
 
+export const { clearSearchResults } = searchSlice.actions;
 export default searchSlice.reducer;

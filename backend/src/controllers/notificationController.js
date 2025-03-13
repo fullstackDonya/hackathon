@@ -1,5 +1,5 @@
 const Notification = require('../models/notificationModel');
-
+const { sendNotification } = require('../websocket');
 // Créer une notification
 const createNotification = async (recipient, sender, type, post) => {
     try {
@@ -7,6 +7,9 @@ const createNotification = async (recipient, sender, type, post) => {
         const notification = new Notification({ recipient, sender, type, post });
         await notification.save();
         console.log("Notification créée avec succès :", notification);
+        
+        // Envoyer la notification via WebSocket
+        sendNotification(recipient, notification);
     } catch (error) {
         console.error("Erreur lors de la création de la notification :", error);
     }

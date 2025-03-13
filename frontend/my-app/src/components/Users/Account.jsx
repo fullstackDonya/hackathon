@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPostsByUserId, deletePost } from "../../redux/slices/postsSlice";
 import { fetchUserById, fetchUsers } from "../../redux/slices/usersSlice";
@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faEdit, faTrash, faPencilAlt, faCalendarAlt, faBookmark } from "@fortawesome/free-solid-svg-icons";
 import "./css/account.css";
 import profileImage from "./img/profile.webp"; 
+import { followUser, unfollowUser } from "../../redux/slices/SubscribeSlice";
 
 const Account = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const Account = () => {
   const loading = useSelector((state) => state.posts.loading);
   const error = useSelector((state) => state.posts.error);
   const users = useSelector((state) => state.users.list);
+  const [profileImageSrc, setProfileImageSrc] = useState(localStorage.getItem('profileImage') || profileImage);
 
   useEffect(() => {
     if (userId) {
@@ -30,6 +32,31 @@ const Account = () => {
 
   const handleDelete = (postId) => {
     dispatch(deletePost(postId));
+  };
+
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const imageSrc = reader.result;
+        setProfileImageSrc(imageSrc);
+        localStorage.setItem('profileImage', imageSrc);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFollow = (userId) => {
+    dispatch(followUser(userId)).then(() => {
+      dispatch(fetchUserById(userId));
+    });
+  };
+
+  const handleUnfollow = (userId) => {
+    dispatch(unfollowUser(userId)).then(() => {
+      dispatch(fetchUserById(userId));
+    });
   };
 
   if (!user) {
@@ -52,7 +79,21 @@ const Account = () => {
       </div>
 
       <div className="account-info">
-        <img src={profileImage} alt="Profil" className="profile-image" />
+        <div style={{ position: "relative" }}>
+          <img src={profileImageSrc} alt="Profil" className="profile-image" />
+          <input
+            type="file"
+            id="profileImageUpload"
+            style={{ display: "none" }}
+            onChange={handleProfileImageChange}
+          />
+          <label
+            htmlFor="profileImageUpload"
+            className="upload-profile-image-button"
+          >
+            <FontAwesomeIcon icon={faPencilAlt} />
+          </label>
+        </div>
         <div className="account-details">
           <p><strong>{user.username}</strong></p>
           <p>{user.email}</p>
@@ -72,7 +113,10 @@ const Account = () => {
         ) : (
           <ul>
             {followedUsers.map((followedUser) => (
-              <li key={followedUser.id}>{followedUser.username}</li>
+              <li key={followedUser.id}>
+                {followedUser.username}
+                <button onClick={() => handleUnfollow(followedUser.id)}>Ne plus suivre</button>
+              </li>
             ))}
           </ul>
         )}

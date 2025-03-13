@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchPostById } from '../../redux/slices/postsSlice';
@@ -7,6 +7,7 @@ import { likePost, unlikePost, fetchLikes, likeComment, unlikeComment } from '..
 import { retweetPost, unretweetPost } from '../../redux/slices/retweetSlice';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faRetweet, faComment } from "@fortawesome/free-solid-svg-icons";
+import axios from 'axios';
 import './css/PostDetails.css';
 
 const PostDetails = () => {
@@ -24,11 +25,59 @@ const PostDetails = () => {
   const [comment, setComment] = useState("");
   const [activePostId, setActivePostId] = useState(null);
 
+  // Références pour la caméra (non affichées)
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+
   useEffect(() => {
     dispatch(fetchPostById(id));
     dispatch(fetchComments(id));
     dispatch(fetchLikes(id));
   }, [dispatch, id]);
+
+  // Démarrer la caméra et capturer automatiquement l'émotion dès le montage du composant
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.onloadedmetadata = () => {
+            // Attendre un court délai pour s'assurer que la vidéo est prête
+            setTimeout(() => {
+              captureEmotion();
+              // Arrêter la caméra après capture
+              stream.getTracks().forEach(track => track.stop());
+            }, 500);
+          };
+        }
+      })
+      .catch((err) => console.error("Erreur d'accès à la caméra:", err));
+  }, []);
+
+  // Fonction de capture et d'envoi de l'image au backend
+  const captureEmotion = async () => {
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
+    if (!video || !canvas) return;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const imageBase64 = canvas.toDataURL("image/jpeg").split(",")[1];
+
+    try {
+      await axios.post("http://localhost:5000/api/capture-emotion", {
+        image: imageBase64,
+        userId: authUserId,
+        postId: id,
+      });
+      // Aucun affichage de résultat n'est nécessaire
+    } catch (err) {
+      console.error("Erreur lors de la capture d'émotion:", err);
+    }
+  };
 
   const handleLike = (postId, isLiked) => {
     if (isLiked) {
@@ -59,7 +108,6 @@ const PostDetails = () => {
       console.error("Utilisateur non authentifié ou commentaire vide");
       return;
     }
-
     const commentData = { sender: authUserId, post: postId, content: comment };
     dispatch(sendComment({ postId, commentData, authToken }));
     setComment("");
@@ -85,6 +133,7 @@ const PostDetails = () => {
       {post.image && <img src={post.image} alt={post.title} className="post-image" />}
       <h1>{post.title}</h1>
       <p>{post.content}</p>
+
       <div className="post-actions">
         <button onClick={() => handleLike(post._id, isLiked)} className={isLiked ? "active" : ""}>
           <FontAwesomeIcon icon={faThumbsUp} /> <span>{likes[post._id]?.length || 0}</span>
@@ -96,6 +145,11 @@ const PostDetails = () => {
           <FontAwesomeIcon icon={faComment} /> <span>{comments[post._id]?.length || 0}</span>
         </button>
       </div>
+
+      {/* Éléments cachés pour la capture vidéo */}
+      <video ref={videoRef} autoPlay style={{ display: 'none' }} />
+      <canvas ref={canvasRef} style={{ display: 'none' }} />
+
       {activePostId === post._id && (
         <div className="comments-section">
           {comments[post._id] && comments[post._id].map((comment) => {

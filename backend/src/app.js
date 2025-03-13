@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const { setupWebSocket } = require("./websocket");
 const http = require("http");
 // Import des routes
-const routes = require("./Routes/routes");
+const routes = require("./routes/routes");
 
 const app = express();
 const PORT = process.env.PORT || 8083;

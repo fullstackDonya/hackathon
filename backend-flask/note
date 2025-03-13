@@ -1,0 +1,26 @@
+# Créer l'environnement virtuel
+python3 -m venv /Users/donyab/Downloads/Hackathon/backend-flask .venv
+
+# Activer l'environnement virtuel
+source /Users/donyab/Downloads/Hackathon/backend-flask .venv/bin/activate
+
+
+# Installer les dépendances 
+
+pip install Flask==2.0.1
+pip install flask-cors==3.0.10
+pip install flask-pymongo==2.3.0
+pip install numpy==1.21.0
+pip install opencv-python-headless==4.5.3.56
+pip install tensorflow==2.5.0
+
+ou 
+
+pip install -r /Users/donyab/Downloads/Hackathon/backend-flask/requirements.txt
+
+# Vérifier les permissions (si nécessaire)
+chmod +x /Users/donyab/Downloads/Hackathon/.venv/bin/activate
+source /Users/donyab/Downloads/Hackathon/.venv/bin/activate
+
+# Exécuter le script
+python /Users/donyab/Downloads/Hackathon/backend-flask/app.py
