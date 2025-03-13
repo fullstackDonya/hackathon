@@ -26,24 +26,25 @@ const UsersToFollow = () => {
 
   return (
     <div className="users-section">
-      <h1><i class="fa-solid fa-users"></i></h1>
+      <h1><i className="fa-solid fa-users"></i></h1>
       <ul>
         {users.map((user) => (
           <li key={user._id} className="user-item">
+            <img src="/img/profile.png" alt="profile" className="profile-image" />
             <p>{user.username}</p>
             {isFollowing(user._id) ? (
               <button 
                 className="unfollow-button"
                 onClick={() => handleUnfollow(user._id)}
               >
-                Ne plus suivre
+                Unfollow
               </button>
             ) : (
               <button 
                 className="follow-button"
                 onClick={() => handleFollow(user._id)}
               >
-                Suivre
+                Follow
               </button>
             )}
           </li>

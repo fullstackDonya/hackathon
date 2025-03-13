@@ -3,7 +3,8 @@ const Notification = require("../models/notificationModel");
 
 const retweetPost = async (req, res) => {
     try {
-        const { postId, userId } = req.body;
+        const { postId } = req.body;
+        const userId = req.user.id;  // Récupère l'ID de l'utilisateur depuis le token (authMiddleware)
 
         const post = await Post.findById(postId);
         if (!post) {
@@ -37,7 +38,8 @@ const retweetPost = async (req, res) => {
 
 const unretweetPost = async (req, res) => {
     try {
-        const { postId, userId } = req.body;
+        const { postId } = req.body;
+        const userId = req.user.id;  // Récupère l'ID de l'utilisateur depuis le token (authMiddleware)
 
         const post = await Post.findById(postId);
         if (!post) {

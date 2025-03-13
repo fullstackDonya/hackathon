@@ -16,7 +16,7 @@ export const getUserSignets = createAsyncThunk(
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             });
-            return response.data;  // On suppose que la réponse contient un tableau des signets de l'utilisateur
+            return response.data.signets;  // Assurez-vous que la réponse contient un tableau des signets de l'utilisateur
         } catch (error) {
             return rejectWithValue(error.response?.data || 'Erreur serveur');
         }
@@ -47,13 +47,13 @@ export const removeSignet = createAsyncThunk(
     'signets/removeSignet',
     async ({ postId, authToken }, { rejectWithValue }) => {
         try {
-            const response = await axios.delete(`/signet`, {  
+            await axios.delete(`/signet`, {  
                 data: { postId },
                 headers: {
                     Authorization: `Bearer ${authToken}`,
                 },
             });
-            return response.data; 
+            return { postId }; 
         } catch (error) {
             return rejectWithValue(error.response?.data || 'Erreur serveur');
         }

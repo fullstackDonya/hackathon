@@ -13,6 +13,5 @@ const retweetSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-retweetSchema.index({ follower: 1, following: 1 }, { unique: true });
-
+retweetSchema.index({ user: 1, post: 1 }, { unique: true });
 module.exports = mongoose.model('Retweet', retweetSchema);

@@ -139,11 +139,12 @@
   }
   
   .comment {
-    background: #192734;
+    background: #192734 !important;
     padding: 10px;
     border-radius: 15px;
     border: 1px solid #38444d;
     margin-bottom: 10px;
+    color: black;
   }
   
   .new-comment-input {
@@ -154,7 +155,7 @@
     border-radius: 30px;
     font-size: 14px;
     outline: none;
-    background-color: #253341;
+    background-color: #253341 ;
     color: #ffffff;
   }
   

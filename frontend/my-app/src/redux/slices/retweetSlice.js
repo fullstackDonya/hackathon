@@ -5,7 +5,7 @@ export const retweetPost = createAsyncThunk(
   'retweets/retweetPost',
   async ({ postId, authToken }, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/post/retweet', { postId }, {
+      const response = await axios.post('/retweet', { postId }, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
@@ -21,12 +21,13 @@ export const unretweetPost = createAsyncThunk(
   'retweets/unretweetPost',
   async ({ postId, authToken }, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/post/unretweet', { postId }, {
+      await axios.delete('/retweet', {
+        data: { postId },
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
-      return response.data;
+      return { postId };  // Retourne l'ID du post pour mettre à jour l'état
     } catch (error) {
       return rejectWithValue(error.response?.data || 'Erreur serveur');
     }
@@ -71,7 +72,7 @@ const retweetSlice = createSlice({
       })
       .addCase(unretweetPost.fulfilled, (state, action) => {
         state.loading = false;
-        state.retweets = state.retweets.filter(retweet => retweet._id !== action.payload._id);
+        state.retweets = state.retweets.filter(retweet => retweet.post._id !== action.payload.postId);
       })
       .addCase(unretweetPost.rejected, (state, action) => {
         state.loading = false;

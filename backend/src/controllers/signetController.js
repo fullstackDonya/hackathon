@@ -1,5 +1,6 @@
 const Signet = require('../models/signetModel');
 const Post = require('../models/postModel');
+const { createNotification } = require('./notificationController');
 
 // Ajouter un signet pour un post
 const addSignet = async (req, res) => {
@@ -24,6 +25,12 @@ const addSignet = async (req, res) => {
         });
 
         await newSignet.save();
+
+        // Créer une notification pour l'ajout du signet
+        const post = await Post.findById(postId).populate('user');
+        if (post) {
+            createNotification(post.user._id, userId, 'signet', postId);
+        }
 
         res.status(201).json({ message: "Post enregistré avec succès dans les signets" });
     } catch (err) {
@@ -67,6 +74,7 @@ const getUserSignets = async (req, res) => {
         // Trouver tous les signets associés à cet utilisateur
         const signets = await Signet.find({ user: userId })
             .populate('post')  // Peupler les données du post dans chaque signet
+            .populate('user')  // Peupler les données de l'utilisateur dans chaque signet
             .exec();
 
         if (signets.length === 0) {
@@ -81,5 +89,4 @@ const getUserSignets = async (req, res) => {
     }
 };
 
-
-module.exports = { addSignet, removeSignet ,getUserSignets };
+module.exports = { addSignet, removeSignet, getUserSignets };
