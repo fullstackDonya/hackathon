@@ -6,6 +6,9 @@ import postsReducer from './slices/postsSlice';
 import notificationReducer from './slices/notificationSlice';
 import likesReducer from './slices/likeSlice';
 import retweetReducer from './slices/retweetSlice';
+import signetReducer from './slices/signetSlice';
+import search from './slices/searchSlice';
+
 
 const rootReducer = combineReducers({
   posts: postsReducer,
@@ -15,6 +18,8 @@ const rootReducer = combineReducers({
   notifications: notificationReducer,
   likes: likesReducer,
   retweets: retweetReducer,
+  signets: signetReducer,
+  search: search
 });
 
 export default rootReducer;

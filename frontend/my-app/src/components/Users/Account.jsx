@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPostsByUserId, deletePost } from "../../redux/slices/postsSlice";
 import { fetchUserById, fetchUsers } from "../../redux/slices/usersSlice";
+import { fetchSignets } from "../../redux/slices/signetSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faEdit, faTrash, faPencilAlt, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faEdit, faTrash, faPencilAlt, faCalendarAlt, faBookmark } from "@fortawesome/free-solid-svg-icons";
 import "./css/account.css";
 import profileImage from "./img/profile.webp"; 
 
@@ -23,6 +24,7 @@ const Account = () => {
       dispatch(fetchUserById(userId));
       dispatch(fetchPostsByUserId(userId));
       dispatch(fetchUsers());
+      dispatch(fetchSignets());
     }
   }, [dispatch, userId]);
 
@@ -39,10 +41,14 @@ const Account = () => {
   return (
     <div className="account-container">
       <div className="account-header">
-        <h2>Mon Compte</h2>
+        {/* <h2>Mon Compte</h2> */}
         <Link to="/add-post" className="add-post-button">
           <FontAwesomeIcon icon={faPlus} />
         </Link>
+        <Link to="/favorites" className="favorites-button">
+          <FontAwesomeIcon icon={faBookmark} /> 
+        </Link>
+      
       </div>
 
       <div className="account-info">
@@ -56,6 +62,7 @@ const Account = () => {
         <button className="edit-profile-button" onClick={() => navigate(`/edit_user/${userId}`)}>
           <FontAwesomeIcon icon={faPencilAlt} />
         </button>
+      
       </div>
 
       <div className="followed-users">

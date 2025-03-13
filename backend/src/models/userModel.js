@@ -5,11 +5,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  firstname:{
+  firstname: {
     type: String,
     required: true,
   },
-  lastname:{
+  lastname: {
     type: String,
     required: true,
   },
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
   age: {
     type: Number,
   },
-});
+}, { timestamps: true }); 
 
 // Exporter le modèle
 module.exports = mongoose.model("User", userSchema);

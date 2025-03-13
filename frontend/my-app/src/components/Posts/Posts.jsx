@@ -6,22 +6,24 @@ import { fetchUsers } from "../../redux/slices/usersSlice";
 import { fetchComments, sendComment } from "../../redux/slices/commentSlice";
 import { likePost, unlikePost, fetchLikes, likeComment, unlikeComment } from "../../redux/slices/likeSlice";
 import { retweetPost, unretweetPost } from "../../redux/slices/retweetSlice";
-
+import { addSignet, removeSignet, fetchSignets } from "../../redux/slices/signetSlice";
+import TrendingNews from "../TrendingNews/TrendingNews";
+import UsersToFollow from "../Users/UsersToFollow";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp, faRetweet, faTrash, faEdit, faComment } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp, faRetweet, faTrash, faEdit, faComment, faPaperclip, faBookmark } from "@fortawesome/free-solid-svg-icons";
 import "./css/Posts.css";
 
 const Posts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const posts = useSelector((state) => state.posts.list);
-  const users = useSelector((state) => state.users.list);
   const authUserId = useSelector((state) => state.auth.userId); // Utilisateur connecté
   const authToken = useSelector((state) => state.auth.token); // Token d'authentification
   const comments = useSelector((state) => state.comments.comments);
   const likes = useSelector((state) => state.likes.likes);
   const commentLikes = useSelector((state) => state.likes.commentLikes);
   const retweets = useSelector((state) => state.retweets.retweets);
+  const signets = useSelector((state) => state.signets.signets);
   const [newPost, setNewPost] = useState("");
   const [image, setImage] = useState(null);
   const [comment, setComment] = useState("");
@@ -30,6 +32,7 @@ const Posts = () => {
   useEffect(() => {
     dispatch(fetchPosts());
     dispatch(fetchUsers());
+    dispatch(fetchSignets());
   }, [dispatch]);
   
   // Charger les commentaires et les likes uniquement quand les posts sont disponibles
@@ -111,37 +114,55 @@ const Posts = () => {
     setComment("");
   };
 
+  const handleSignet = (postId, isSignet) => {
+    if (isSignet) {
+      dispatch(removeSignet({ postId, authToken }));
+    } else {
+      dispatch(addSignet({ postId, authToken }));
+    }
+  };
+
   return (
     <div className="container-posts">
       <div className="main-content">
+        <TrendingNews />
         <div className="posts-section">
-          <form onSubmit={handlePostSubmit}>
-            <input
-              type="text"
-              placeholder="Quoi de neuf ?"
-              value={newPost}
-              onChange={(e) => setNewPost(e.target.value)}
-              className="new-post-input"
-            />
-            <input
-              type="file"
-              onChange={(e) => setImage(e.target.files[0])}
-              className="new-post-input"
-            />
-            <button type="submit" className="post-button">
-              Poster
-            </button>
-          </form>
-
+          <div className="new-post-section">
+            <form onSubmit={handlePostSubmit}>
+                <input
+                  type="text"
+                  placeholder="Quoi de neuf ?"
+                  value={newPost}
+                  onChange={(e) => setNewPost(e.target.value)}
+                  className="new-post-input"
+                />
+                <div className="file-input-container">
+                  <label htmlFor="file-input" className="file-input-label">
+                    <FontAwesomeIcon icon={faPaperclip} /> Ajouter une image
+                  </label>
+                  <input
+                    type="file"
+                    id="file-input"
+                    onChange={(e) => setImage(e.target.files[0])}
+                    className="file-input"
+                  />
+                </div>
+                <button type="submit" className="post-button">
+                  Poster
+                </button>
+            </form>
+          </div>
+      
           <ul>
             {posts.map((post) => {
               const isLiked = likes[post._id]?.some(like => like.user === authUserId);
               const isRetweeted = post.retweets && post.retweets.some(retweet => retweet.user === authUserId);
+              const isSignet = signets.some(signet => signet.post._id === post._id);
               return (
                 <li key={post._id} className="post-item">
                   <a href="#" onClick={() => handleGet(post._id)} className="post-link">
                     <p><strong>{post.content}</strong></p>
-                    <p>{post.createdAt}</p>
+                    <p className="post-date">{new Date(post.createdAt).toLocaleDateString()}</p>
                   </a>
                   {/* Boutons Modifier/Supprimer si c'est l'auteur */}
                   {authUserId && authUserId === post.author._id ? (
@@ -168,6 +189,11 @@ const Posts = () => {
                     {/* Bouton Commentaire */}
                     <button onClick={() => handleCommentClick(post._id)}>
                       <FontAwesomeIcon icon={faComment} /> <span>{comments[post._id]?.length || 0}</span>
+                    </button>
+
+                    {/* Bouton Signet */}
+                    <button onClick={() => handleSignet(post._id, isSignet)} className={isSignet ? "active" : ""}>
+                      <FontAwesomeIcon icon={faBookmark} /> <span>{isSignet ? "Retirer" : "Ajouter"}</span>
                     </button>
                   </div>
                   
@@ -203,18 +229,7 @@ const Posts = () => {
           </ul>
         </div>
 
-        {/* Liste des utilisateurs */}
-        <div className="users-section">
-          <h3>Utilisateurs à suivre</h3>
-          <ul>
-            {users.map((user) => (
-              <li key={user.id} className="user-item">
-                <p>{user.username}</p>
-                <button className="follow-button" onClick={() => console.log("Suivre", user.id)}>Suivre</button>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <UsersToFollow />
       </div>
     </div>
   );

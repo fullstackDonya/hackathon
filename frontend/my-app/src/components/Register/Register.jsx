@@ -15,7 +15,8 @@ const Register = () => {
   const { loading, error } = useSelector((state) => state.auth);
 
   const handleRegister = () => {
-    dispatch(register({ email, password, username, firstname, lastname }))
+    const createdAt = new Date().toISOString(); // Obtenir la date et l'heure actuelles
+    dispatch(register({ email, password, username, firstname, lastname, createdAt }))
       .unwrap()
       .then(() => {
         alert("Compte créé avec succès");

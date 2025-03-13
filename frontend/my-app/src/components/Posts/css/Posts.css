@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   padding: 20px;
+  margin: 20px;
   background-color: #f5f8fa;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -12,12 +13,19 @@
   width: 100%;
   max-width: 1200px;
 }
-
-.posts-section {
-  width: 70%;
-  margin-right: 20px;
+.news-section {
+  width: 30%;
+}
+.new-post-section {
+  margin-left: 40px;
 }
 
+.posts-section {
+  width: 60%;
+}
+.posts-section ul li {
+  list-style-type: none;
+}
 .new-post-input {
   width: 100%;
   padding: 12px;
@@ -31,6 +39,28 @@
 
 .new-post-input:focus {
   box-shadow: 0 0 8px rgba(29, 161, 242, 0.6);
+}
+
+.file-input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.file-input-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #1da1f2;
+  font-size: 16px;
+}
+
+.file-input-label:hover {
+  color: #0d8ddb;
+}
+
+.file-input {
+  display: none;
 }
 
 .post-button {
@@ -70,6 +100,11 @@
 
 .post-link:hover {
   background-color: #f5f8fa;
+}
+
+.post-date {
+  font-size: 12px;
+  color: #aab8c2;
 }
 
 .post-actions {

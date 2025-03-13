@@ -50,21 +50,7 @@ export const fetchUsers = createAsyncThunk(
   }
 );
 
-export const fetchProfessionalUsers = createAsyncThunk(
-  'users/fetchProfessionalUsers',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get('/users');
-      const professionalRoles = ['psychologue', 'médecin', 'coach en gestion du stress', 'thérapeute'];
-      const professionalUsers = response.data.filter(user => 
-        professionalRoles.includes(user.role) && user.role !== 'user' && user.role !== 'admin' && user.role
-      );
-      return professionalUsers;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+
 export const register = createAsyncThunk(
   "auth/register",
   async (user, { rejectWithValue }) => {
@@ -76,7 +62,25 @@ export const register = createAsyncThunk(
     }
   }
 );
-
+export const updateUser = createAsyncThunk(
+  'users/updateUser',
+  async ({ id, username, email, authToken }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `/update/${id}`,
+        { username, email },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'Erreur serveur');
+    }
+  }
+);
 const usersSlice = createSlice({
   name: 'users',
   initialState: {
@@ -117,14 +121,15 @@ const usersSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(fetchProfessionalUsers.pending, (state) => {
+      .addCase(updateUser.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
-      .addCase(fetchProfessionalUsers.fulfilled, (state, action) => {
+      .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload;
+        state.user = action.payload;
       })
-      .addCase(fetchProfessionalUsers.rejected, (state, action) => {
+      .addCase(updateUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
