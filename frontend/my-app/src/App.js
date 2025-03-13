@@ -17,6 +17,7 @@ import Favorites from "./components/Favorites/Favorites";
 import PostsPage  from "./pages/Posts/PostsPage";
 import PostDetails from "./components/Posts/PostDetails";
 import AddPost from "./components/Posts/AddPost";
+import EditPost from "./components/Posts/EditPost";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/edit_user/:id" element={<UpdateUser />} />
           <Route path="/account" element={<Account />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/edit-post/:id" element={<EditPost />} />
           
 
         </Routes>

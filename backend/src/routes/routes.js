@@ -56,6 +56,11 @@ const {
   createNotification 
 } = require('../controllers/notificationController');
 
+const {
+   calculateTrendingHashtags,
+   getTrendingHashtags 
+} = require('../controllers/trendingController');
+
 const multer = require('multer');
 const fs = require("fs");
 const path = require("path");
@@ -133,12 +138,14 @@ router.get('/followers', authMiddleware, getFollowers);
 //Routes SearchBar
 router.get('/search', searchPosts);
 
-//Routes Notifications 
-
 // Routes Notifications 
 router.post('/notifications', authMiddleware, createNotification);
 router.get('/notifications', authMiddleware, getNotifications);
 router.put('/notifications/:id/read', authMiddleware, markAsRead);
 router.put('/notifications/read-all', authMiddleware, markAllAsRead);
+
+// Routes Trending
+router.get('/trending', calculateTrendingHashtags);
+router.get('/trending/hashtags', getTrendingHashtags);
 
 module.exports = router;

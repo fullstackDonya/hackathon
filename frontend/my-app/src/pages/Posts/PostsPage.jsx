@@ -80,6 +80,7 @@ const PostsPage = () => {
                     <h1><i class="fa-brands fa-searchengin"></i></h1>
                 </div>
                 <Search />
+                <Tendances />
             
                 </div>
                 <div className="center-section">

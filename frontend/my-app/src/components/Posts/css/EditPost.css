@@ -1,0 +1,88 @@
+/* EditPost.css */
+
+.edit-post-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  
+  .edit-post-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .edit-post-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .edit-post-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  .edit-post-form input[type="text"],
+  .edit-post-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e1e8ed;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .edit-post-form input[type="file"] {
+    margin-bottom: 20px;
+  }
+  
+  .edit-post-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .edit-post-actions button {
+    padding: 10px 20px;
+    background-color: #1da1f2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .edit-post-actions button:hover {
+    background-color: #0d8ddb;
+  }
+  
+  .edit-post-actions button.cancel {
+    background-color: #657786;
+  }
+  
+  .edit-post-actions button.cancel:hover {
+    background-color: #4a5562;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .edit-post-container {
+      padding: 15px;
+    }
+  
+    .edit-post-container h1 {
+      font-size: 20px;
+    }
+  }
+  

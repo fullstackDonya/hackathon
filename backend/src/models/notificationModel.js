@@ -6,12 +6,12 @@ const notificationSchema = new mongoose.Schema(
     sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Celui qui a généré la notif
     type: { 
       type: String, 
-      enum: ['like', 'comment', 'retweet', 'follow'], 
+      enum: ['like', 'comment', 'retweet', 'follow', 'signet'], 
       required: true 
     }, // Types de notification
     post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: false }, // Optionnel (likes, commentaires, retweets)
     isRead: { type: Boolean, default: false }, // Notification lue ou non
-  },
+  }, 
   { timestamps: true }
 );
 

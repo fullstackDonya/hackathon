@@ -27,9 +27,9 @@ const addSignet = async (req, res) => {
         await newSignet.save();
 
         // Créer une notification pour l'ajout du signet
-        const post = await Post.findById(postId).populate('user');
+        const post = await Post.findById(postId).populate('author');
         if (post) {
-            createNotification(post.user._id, userId, 'signet', postId);
+            createNotification(post.author._id, userId, 'signet', postId);
         }
 
         res.status(201).json({ message: "Post enregistré avec succès dans les signets" });
