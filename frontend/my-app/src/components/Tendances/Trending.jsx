@@ -1,4 +1,3 @@
-// src/components/Tendances/Tendances.jsx
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTrending } from '../../redux/slices/trendingSlice';

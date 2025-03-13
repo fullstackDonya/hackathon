@@ -7,6 +7,8 @@ import { fetchLikes, unlikeComment, likeComment } from "../../redux/slices/likeS
 import { getUserSignets } from "../../redux/slices/signetSlice";
 import Actualite from "../../components/Posts/Actualite";
 import Tendances from "../../components/Posts/Tendances";
+import Trending from "../../components/Tendances/Trending";
+
 import Search from "../../components/Search/Search";
 import AddPost from "../../components/Posts/AddPost";
 import UsersToFollow from "../../components/Users/UsersToFollow";
@@ -80,7 +82,7 @@ const PostsPage = () => {
                     <h1><i class="fa-brands fa-searchengin"></i></h1>
                 </div>
                 <Search />
-                <Tendances />
+                <Trending />
             
                 </div>
                 <div className="center-section">

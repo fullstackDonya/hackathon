@@ -8,7 +8,8 @@ import likesReducer from './slices/likeSlice';
 import retweetReducer from './slices/retweetSlice';
 import signetReducer from './slices/signetSlice';
 import searchReducer from './slices/searchSlice';
-import subscriptionReducer from './slices/SubscribeSlice'; // Correction de l'importation
+import subscriptionReducer from './slices/SubscribeSlice';
+import trendingReducer from './slices/trendingSlice'; 
 
 const rootReducer = combineReducers({
   posts: postsReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   retweets: retweetReducer,
   signets: signetReducer,
   search: searchReducer,
+  trending: trendingReducer,
   subscription: subscriptionReducer,
 });
 
