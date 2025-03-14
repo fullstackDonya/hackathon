@@ -13,6 +13,7 @@ import './css/PostDetails.css';
 const PostDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+
   const post = useSelector((state) => state.posts.currentPost);
   const loading = useSelector((state) => state.posts.loading);
   const error = useSelector((state) => state.posts.error);
@@ -22,10 +23,10 @@ const PostDetails = () => {
   const retweets = useSelector((state) => state.retweets.retweets);
   const authUserId = useSelector((state) => state.auth.userId);
   const authToken = useSelector((state) => state.auth.token);
+
   const [comment, setComment] = useState("");
   const [activePostId, setActivePostId] = useState(null);
 
-  // Références pour la caméra (non affichées)
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -35,17 +36,14 @@ const PostDetails = () => {
     dispatch(fetchLikes(id));
   }, [dispatch, id]);
 
-  // Démarrer la caméra et capturer automatiquement l'émotion dès le montage du composant
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true })
       .then((stream) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
           videoRef.current.onloadedmetadata = () => {
-            // Attendre un court délai pour s'assurer que la vidéo est prête
             setTimeout(() => {
               captureEmotion();
-              // Arrêter la caméra après capture
               stream.getTracks().forEach(track => track.stop());
             }, 500);
           };
@@ -54,14 +52,15 @@ const PostDetails = () => {
       .catch((err) => console.error("Erreur d'accès à la caméra:", err));
   }, []);
 
-  // Fonction de capture et d'envoi de l'image au backend
   const captureEmotion = async () => {
+    if (!videoRef.current || !canvasRef.current) return;
+
     const canvas = canvasRef.current;
     const video = videoRef.current;
-    if (!video || !canvas) return;
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
+
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -73,7 +72,6 @@ const PostDetails = () => {
         userId: authUserId,
         postId: id,
       });
-      // Aucun affichage de résultat n'est nécessaire
     } catch (err) {
       console.error("Erreur lors de la capture d'émotion:", err);
     }
@@ -87,46 +85,18 @@ const PostDetails = () => {
     }
   };
 
-  const handleCommentLike = (commentId, isLiked) => {
-    if (isLiked) {
-      dispatch(unlikeComment({ commentId, authToken }));
-    } else {
-      dispatch(likeComment({ commentId, authToken }));
-    }
-  };
-
-  const handleRetweet = (postId, isRetweeted) => {
-    if (isRetweeted) {
-      dispatch(unretweetPost({ postId, authToken }));
-    } else {
-      dispatch(retweetPost({ postId, authToken }));
-    }
-  };
-
   const handleCommentSubmit = (postId) => {
-    if (!authUserId || !comment) {
-      console.error("Utilisateur non authentifié ou commentaire vide");
-      return;
-    }
-    const commentData = { sender: authUserId, post: postId, content: comment };
-    dispatch(sendComment({ postId, commentData, authToken }));
+    if (!authUserId || !comment) return;
+    dispatch(sendComment({ postId, commentData: { sender: authUserId, post: postId, content: comment }, authToken }));
     setComment("");
   };
 
-  if (loading) {
-    return <div>Chargement...</div>;
-  }
+  if (loading) return <div>Chargement...</div>;
+  if (error) return <div>Erreur : {error}</div>;
+  if (!post) return <div>Post non trouvé</div>;
 
-  if (error) {
-    return <div>Erreur : {error}</div>;
-  }
-
-  if (!post) {
-    return <div>Post non trouvé</div>;
-  }
-
-  const isLiked = likes[post._id]?.some(like => like.user === authUserId);
-  const isRetweeted = post.retweets && post.retweets.some(retweet => retweet.user === authUserId);
+  const isLiked = likes[post._id]?.some(like => like?.user === authUserId);
+  const isRetweeted = post.retweets?.some(retweet => retweet?.user === authUserId);
 
   return (
     <div className="post-details">
@@ -136,42 +106,31 @@ const PostDetails = () => {
 
       <div className="post-actions">
         <button onClick={() => handleLike(post._id, isLiked)} className={isLiked ? "active" : ""}>
-          <FontAwesomeIcon icon={faThumbsUp} /> <span>{likes[post._id]?.length || 0}</span>
-        </button>
-        <button onClick={() => handleRetweet(post._id, isRetweeted)} className={isRetweeted ? "active" : ""}>
-          <FontAwesomeIcon icon={faRetweet} /> <span>{retweets[post._id]?.length || 0}</span>
+          <FontAwesomeIcon icon={faThumbsUp} /> {likes[post._id]?.length || 0}
         </button>
         <button onClick={() => setActivePostId(post._id)}>
-          <FontAwesomeIcon icon={faComment} /> <span>{comments[post._id]?.length || 0}</span>
+          <FontAwesomeIcon icon={faComment} /> {comments[post._id]?.length || 0}
         </button>
       </div>
 
-      {/* Éléments cachés pour la capture vidéo */}
       <video ref={videoRef} autoPlay style={{ display: 'none' }} />
       <canvas ref={canvasRef} style={{ display: 'none' }} />
 
       {activePostId === post._id && (
         <div className="comments-section">
-          {comments[post._id] && comments[post._id].map((comment) => {
-            const isCommentLiked = commentLikes[comment._id]?.some(like => like.user === authUserId);
-            return (
-              <div key={comment._id} className="comment">
-                <p><strong>{comment.sender.name}</strong>: {comment.content}</p>
-                <button onClick={() => handleCommentLike(comment._id, isCommentLiked)} className={isCommentLiked ? "active" : ""}>
-                  <FontAwesomeIcon icon={faThumbsUp} /> <span>{commentLikes[comment._id]?.length || 0}</span>
-                </button>
-              </div>
-            );
-          })}
+          {comments[post._id]?.map((comment) => (
+            <div key={comment._id} className="comment">
+              <p><strong>{comment?.sender?.name || "Utilisateur inconnu"}</strong>: {comment.content}</p>
+            </div>
+          ))}
           <form onSubmit={(e) => { e.preventDefault(); handleCommentSubmit(post._id); }}>
             <input
               type="text"
               placeholder="Ajouter un commentaire..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className="new-comment-input"
             />
-            <button type="submit" className="comment-button">Envoyer</button>
+            <button type="submit">Envoyer</button>
           </form>
         </div>
       )}

@@ -72,25 +72,21 @@ const getCommentLikes = async (req, res) => {
 
 const unlike = async (req, res) => {
     try {
-        const { postId } = req.body;
-        const userId = req.user.id;  // Récupère l'ID de l'utilisateur depuis le token (authMiddleware)
+        const { postId, commentId } = req.body;
+        const userId = req.user.id;
 
-        const post = await Post.findById(postId);
-        if (!post) {
-            return res.status(404).json({ message: "Post non trouvé" });
-        }
+        const like = await Like.findOneAndDelete({
+            user: userId,
+            ...(postId ? { post: postId } : { comment: commentId })
+        });
 
-        const index = post.likes.indexOf(userId);
-        if (index === -1) {
+        if (!like) {
             return res.status(400).json({ message: "Vous n'avez pas liké cet élément" });
         }
 
-        post.likes.splice(index, 1);
-        await post.save();
-
-        res.status(200).json(post);
-    } catch (error) {
-        console.error("Erreur serveur :", error);
+        res.status(200).json({ message: "Like retiré avec succès", user: userId });
+    } catch (err) {
+        console.error("Erreur lors du unlike :", err);
         res.status(500).json({ message: "Erreur serveur" });
     }
 };

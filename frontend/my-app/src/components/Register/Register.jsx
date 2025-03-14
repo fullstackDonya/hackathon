@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../redux/slices/authSlice";
 import "./Register.css";
@@ -30,7 +30,7 @@ const Register = () => {
 
   return (
     <div className="register-form">
-      <h1>Register</h1>
+      <h1>Inscription</h1>
       <input
         type="text"
         placeholder="Email"
@@ -39,25 +39,25 @@ const Register = () => {
       />
       <input
         type="text"
-        placeholder="Username"
+        placeholder="Nom d'utilisateur"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
       <input
         type="text"
-        placeholder="First Name"
+        placeholder="Prénom"
         value={firstname}
         onChange={(e) => setFirstname(e.target.value)}
       />
       <input
         type="text"
-        placeholder="Last Name"
+        placeholder="Nom"
         value={lastname}
         onChange={(e) => setLastname(e.target.value)}
       />
       <input
         type="password"
-        placeholder="Password"
+        placeholder="Mot de passe"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
@@ -65,6 +65,10 @@ const Register = () => {
         {loading ? "Enregistrement..." : "Continuer"}
       </button>
       {error && <p className="error">{error}</p>}
+      <div className="links">
+        <Link to="/login">Se connecter</Link>
+        <Link to="/">Retour à l'accueil</Link>
+      </div>
     </div>
   );
 };

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { followUser, unfollowUser, fetchFollowing } from "../../redux/slices/SubscribeSlice";
+import { useNavigate } from "react-router-dom";
 import "./css/UsersToFollow.css";
 
 const UsersToFollow = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const users = useSelector((state) => state.users.list);
   const followingList = useSelector((state) => state.subscription?.following || []);
 
@@ -24,25 +26,39 @@ const UsersToFollow = () => {
     return followingList.includes(userId);
   };
 
+  const handleUserClick = (userId) => {
+    navigate(`/account/${userId}`);
+  };
+
   return (
     <div className="users-section">
       <h1><i className="fa-solid fa-users"></i></h1>
       <ul>
         {users.map((user) => (
-          <li key={user._id} className="user-item">
+          <li 
+            key={user._id} 
+            className="user-item"
+            onClick={() => handleUserClick(user._id)}
+          >
             <img src="/img/profile.png" alt="profile" className="profile-image" />
             <p>{user.username}</p>
             {isFollowing(user._id) ? (
               <button 
                 className="unfollow-button"
-                onClick={() => handleUnfollow(user._id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleUnfollow(user._id);
+                }}
               >
                 Unfollow
               </button>
             ) : (
               <button 
                 className="follow-button"
-                onClick={() => handleFollow(user._id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFollow(user._id);
+                }}
               >
                 Follow
               </button>

@@ -41,7 +41,7 @@ const Favorites = () => {
 
   return (
     <div className="favorites-page">
-      <div className="top-bar"></div>
+     
       <div className="favorites-container">
         <h2>Mes Favoris</h2>
         <div className="favorites-grid">

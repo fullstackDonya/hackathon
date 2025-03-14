@@ -88,7 +88,7 @@ const Actualite = ({ posts, comments, likes, retweets, signets = [], authUserId,
                     const isCommentLiked = commentLikes[comment._id]?.some(like => like.user === authUserId);
                     return (
                       <div key={comment._id} className="comment">
-                        <p><strong>{comment.sender.name}</strong>: {comment.content}</p>
+                        <p><strong>{comment.sender?.username || "Utilisateur inconnu"}</strong>: {comment.content}</p>
                         <button onClick={() => handleCommentLike(comment._id, isCommentLiked)} className={isCommentLiked ? "active" : ""}>
                           <FontAwesomeIcon icon={faThumbsUp} /> <span>{commentLikes[comment._id]?.length || 0}</span>
                         </button>

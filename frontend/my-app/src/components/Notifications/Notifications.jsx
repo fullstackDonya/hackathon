@@ -23,8 +23,10 @@ const Notifications = () => {
 
   const handleNotificationClick = (notification) => {
     dispatch(markNotificationAsRead(notification._id));
-    if (notification.type === 'like' || notification.type === 'comment' || notification.type === 'retweet') {
-      navigate(`/post/${notification.post}`);
+    if (notification.type === 'like' || notification.type === 'comment' || notification.type === 'retweet' || notification.type === 'signet') {
+      navigate(`/post/${notification.post._id}`);
+    } else if (notification.type === 'follow' && notification.user) {
+      navigate(`/user/${notification.user._id}`);
     }
   };
 
@@ -51,7 +53,7 @@ const Notifications = () => {
                   className={`notification-item ${notification.isRead ? 'read' : 'unread'}`}
                   onClick={() => handleNotificationClick(notification)}
                 >
-                  <p>{notification.type} sur le post {notification.post}</p>
+                  <p>{notification.type} sur le post {notification.post?.content || notification.user?.username}</p>
                 </div>
               ))}
             </div>

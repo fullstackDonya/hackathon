@@ -44,3 +44,14 @@
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(29, 161, 242, 0.5);
 }
+.btn-logout{
+  background-color: transparent !important;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 17px;
+  transition: background-color 0.3s;
+  margin-bottom: 8px;
+}

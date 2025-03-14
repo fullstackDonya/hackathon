@@ -8,6 +8,7 @@ import './Navbar.css';
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const isAuthenticated = useSelector((state) => state.auth.token !== null);
+  const userId = useSelector((state) => state.auth.userId); // Assurez-vous que l'ID de l'utilisateur est stocké dans l'état auth
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -30,7 +31,7 @@ const Navbar = () => {
         {isAuthenticated && (
           <>
             <li><Link to="/post" onClick={() => setMenuOpen(false)}>Post</Link></li>
-            <li><Link to="/account" onClick={() => setMenuOpen(false)}>Mon Compte</Link></li>
+            <li><Link to={`/account/${userId}`} onClick={() => setMenuOpen(false)}>Mon Compte</Link></li>
           </>
         )}
         {isAuthenticated ? (

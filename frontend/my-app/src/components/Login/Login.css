@@ -37,7 +37,7 @@
 }
 
 .login-container input {
-  width: 85%;
+  width: 100%;
   padding: 12px;
   border: 1px solid #444; /* Bordure plus sombre */
   border-radius: 8px;
@@ -59,7 +59,7 @@
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.3s ease, box-shadow 0.3s ease;
 }
@@ -69,19 +69,19 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.login-container .register-link {
+.login-container .links {
   text-align: center;
   margin-top: 20px;
-  color: #1da1f2; /* Lien en bleu clair */
 }
 
-.login-container .register-link a {
+.login-container .links a {
   color: #1da1f2;
   text-decoration: none;
+  margin: 0 10px;
   transition: text-decoration 0.3s ease;
 }
 
-.login-container .register-link a:hover {
+.login-container .links a:hover {
   text-decoration: underline;
 }
 

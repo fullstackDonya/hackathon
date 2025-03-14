@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import axios from "../../utils/axiosConfig"; // Importer la configuration Axios
 import { setCredentials } from "../../redux/slices/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 
 const Login = () => {
@@ -11,7 +11,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -24,6 +23,7 @@ const Login = () => {
       alert("Erreur lors de la connexion");
     }
   };
+
   return (
     <div className="login-container">
       <h2>Connexion</h2>
@@ -48,6 +48,10 @@ const Login = () => {
         </div>
         <button type="submit">Se connecter</button>
       </form>
+      <div className="links">
+        <Link to="/register">Créer un compte</Link>
+        <Link to="/">Retour à l'accueil</Link>
+      </div>
     </div>
   );
 };

@@ -24,18 +24,17 @@ export const fetchConnectedUsers = createAsyncThunk(
   }
 );
 
+
+
 // Action pour récupérer les informations de l'utilisateur
-export const fetchUserById = createAsyncThunk(
-  'users/fetchUserById',
-  async (userId, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`/user/${userId}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || 'Erreur serveur');
-    }
+export const fetchUserById = createAsyncThunk('users/fetchUserById', async (userId, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`/user/${userId}`);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
   }
-);
+});
 
 // Action pour récupérer la liste des utilisateurs
 export const fetchUsers = createAsyncThunk(
