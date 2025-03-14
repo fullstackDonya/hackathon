@@ -59,7 +59,7 @@ const Actualite = ({ posts, comments, likes, retweets, signets = [], authUserId,
               </a>
               {authUserId && authUserId === post.author._id ? (
                 <div className="post-actions">
-                  <button onClick={() => navigate(`/post/edit/${post._id}`)}>
+                  <button onClick={() => navigate(`/edit-post/${post._id}`)}>
                     <FontAwesomeIcon icon={faEdit} /> Modifier
                   </button>
                   <button onClick={() => handleDelete(post._id)} className="delete-button">

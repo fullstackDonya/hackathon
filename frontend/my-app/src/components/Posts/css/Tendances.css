@@ -1,0 +1,61 @@
+/* filepath: /Users/donyab/Downloads/Hackathon/frontend/my-app/src/components/Tendances/css/Tendances.css */
+
+.tendances-section {
+    padding: 20px;
+    background: #f9f9f973;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tendances-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .news-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .news-item:last-child {
+    border-bottom: none;
+  }
+  
+  .news-item:hover {
+    transform: translateX(5px);
+  }
+  
+  .news-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    margin-right: 15px;
+  }
+  
+  .news-item h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .news-item p {
+    margin: 5px 0 0;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  @media (max-width: 768px) {
+    .news-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .news-item img {
+      margin-bottom: 10px;
+    }
+  }
+  

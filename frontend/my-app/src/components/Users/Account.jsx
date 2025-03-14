@@ -144,11 +144,12 @@ const Account = () => {
         <div className="posts-grid">
           {posts.map((post) => (
             <div key={post._id} className="post">
+              {post.image && <img src={post.image} alt={post.title} className="post-image" />}
               <h4>{post.title}</h4>
               <p>{post.content}</p>
               <p className="post-date">{new Date(post.createdAt).toLocaleDateString()}</p>
               <div className="post-actions">
-                <button onClick={() => navigate(`/post/edit/${post._id}`)}>
+                <button onClick={() => navigate(`/edit-post/${post._id}`)}>
                   <FontAwesomeIcon icon={faEdit} /> Modifier
                 </button>
                 <button onClick={() => handleDelete(post._id)} className="delete-button">
